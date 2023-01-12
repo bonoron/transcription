@@ -328,6 +328,12 @@
     font-size: 8px;
   }
 
+  .about_price_wrapper {
+    height: 800px;
+    padding: 30px 4% 10px;
+    background-color: black;
+  }
+
   .container_price {
     max-width: 1200px;
     width: 100%;
@@ -368,6 +374,43 @@
           -10px 0 60px violet,
           10px 0 60px blue;
 }
+
+.box_free {
+  height: 80px;
+}
+
+.login_btn_free2 {
+  background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
+  background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
+  border-radius: 25px;
+  padding-top: 10px;
+  width: 200px;
+  height: 50px;
+  color: #f1f1f3;
+  font-size: 18px;
+  font-weight: bold;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.login_btn_free2:hover {
+  background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
+  background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientEffect 1s infinite alternate;
+  border: #FB6DFC 1px solid;
+}
+
+.contents_price {
+  height: 500px;
+  width: 100%;
+  display: flex;
+  padding-top: 20px;
+}
+
 
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
