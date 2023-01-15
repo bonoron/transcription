@@ -191,7 +191,7 @@
   }
 
   .about_service_wrapper {
-    height: 650px;
+    height: 700px;
     padding: 30px 4% 10px;
     background-color: black;
   }
@@ -215,11 +215,6 @@
     font-weight: bold;
   }
 
-  .contents {
-    height: 500px;
-    width: 100%;
-    display: flex;
-  }
 
   .contents_use_case {
     height: 650px;
@@ -234,7 +229,8 @@
   }
 
   .use_case {
-    width: 1100px;
+    width: 100%;
+    max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
@@ -285,13 +281,20 @@
   }
 
   .content {
-    height: 430px;
-    width: 400px;
+    height: 500px;
+    width: 33.3333333333%;
     padding: 15px 1.5% 5px;
   }
 
+  .price_comment {
+    width: 90%;
+    color: #f1f1f3;
+    margin: 0 auto;
+    padding-top: 5px;
+  }
+
   .box {
-    width: 330px;
+    width: 100%;
     max-width: 350px;
     height: 400px;
     background-color: #6c7686;
@@ -305,7 +308,10 @@
     text-align: center;
     font-size: 22px;
     height: 135px;
+    width: 100%;
+    max-width: 280px;
     border-bottom: #f1f1f3 1px solid;
+    margin: 0 auto;
   }
 
   .price_note{
@@ -316,22 +322,21 @@
   .content_info {
     text-align: center;
     height: 45px;
-    
     padding: 15px 1.5% 5px;
   }
 
   .content_detail {
     height: 190px;
-    width: 230px;
+    width: 75%;
+    min-width: 230px;
     margin: 0 auto;
   }
 
   .contents_price {
-    height: 500px;
+    height: 550px;
     width: 100%;
     display: flex;
     padding-top: 20px;
-    
   }
 
   .content p {
@@ -344,31 +349,44 @@
     width: 100%;
   }
 
+  .contents {
+    height: 480px;
+    width: 100%;
+    display: flex;
+  }
+
   .right_content {
     width: 60%;
-    height: 450px;
+    height: 100%;
+    
   }
 
   .right_content video {
     width: 100%;
-    max-height: 420px;
+    max-height: 480px;
     height: auto;
     border-radius: 5px;
   }
 
   .left_content {
     width: 40%;
-    height: 450px;
-    padding: 0px 4% 10px;
+    height: 100%;
+    padding: 0px 4% 10px ;
     color: #f1f1f3;
   }
 
-  .note {
-    font-size: 8px;
+  .left_content h2 {
+    font-size: max(20px, 1.6vw);
   }
 
+  .left_content p {
+    font-size: max(14px, 0.9vw);
+  }
+
+  
+
   .about_price_wrapper {
-    height: 800px;
+    height: 850px;
     padding: 30px 4% 10px;
     background-color: black;
   }
