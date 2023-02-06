@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Invest</title>
+    <title>Transcription</title>
     <link rel="stylesheet" href="./public/css/style_page.css">
     <script src="/send_url.js"></script>
     <script src="https://kit.fontawesome.com/8817c22d4f.js" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
             <div class="email_auth">
               <p>メールアドレス</p>
               <input type="text" id="email" class="email" placeholder="メールアドレスを入力">
-              <p style="padding-top: 15px;">パスワード</p>
+              <p style="padding-top: 15px;">パスワード　<span id="buttonEye" class="fa fa-eye" onclick="pushHideButton()"></span></p>
               <input type="password" id="password" class="password" placeholder="パスワードを入力">
-              <button id="btn" class="btn_email" type="submit" onclick="signUp()">
+              <button id="login-button" class="btn_email" type="submit">
                 ログイン
               </button>
               <a class="reset_password" href="./">パスワードをお忘れですか？</a><br>
@@ -57,34 +57,136 @@
         </div>        
       </div>
     </footer>
+    <script src="./config.js"></script>
     <script>      
-      const firebaseConfig = {
-        apiKey: "AIzaSyAJGyDAkuzU2C9Psr0X_iljcJgJpvi2O24",
-        authDomain: "transcription-2e6e2.firebaseapp.com",
-        projectId: "transcription-2e6e2",
-        storageBucket: "transcription-2e6e2.appspot.com",
-        messagingSenderId: "118222486071",
-        appId: "1:118222486071:web:c9571aec0e456c0e949db2",
-        measurementId: "G-XWMY98DN1D"
-        };
-      // firebase の初期化
-      firebase.initializeApp(firebaseConfig);
-
-      var provider = new firebase.auth.GoogleAuthProvider();
-      function signIn_google() {
-        firebase.auth().signInWithPopup(provider)
-        .then(result => {
-            console.log('ログインしました。');
-            
-        }).catch(error => {
-              const signinError = `
-              サインインエラー
-              エラーメッセージ： ${error.message}
-              エラーコード: ${error.code}
-              `
-              console.log(signinError);
-        });
+    // Functions that allow visual inspection of passwords
+    function pushHideButton() {
+        var txtPass = document.getElementById("password");
+        var btnEye = document.getElementById("buttonEye");
+        if (txtPass.type === "text") {
+          txtPass.type = "password";
+          btnEye.className = "fa fa-eye";
+        } else {
+          txtPass.type = "text";
+          btnEye.className = "fa fa-eye-slash";
+        }
       }
+
+    const firestore = firebase.firestore();
+
+    // Google Auth
+    var provider = new firebase.auth.GoogleAuthProvider();
+    function signIn_google() {
+      firebase.auth().signInWithPopup(provider)
+      .then(result => {
+          console.log('ログインしました。');
+          const userRef = firestore.collection("users").doc(result.user.uid);
+          const userData = {
+            email: result.user.email,
+            displayName: result.user.displayName,
+            createdAt: firebase.firestore.Timestamp.fromDate(new Date())
+          };
+
+          userRef.set(userData, { merge: true })
+            .then(() => {
+              console.log("User data stored in Firestore");
+            })
+            .catch((error) => {
+              console.error("Error storing user data in Firestore", error);
+            });
+      }).catch(error => {
+            const signinError = `
+            サインインエラー
+            エラーメッセージ： ${error.message}
+            エラーコード: ${error.code}
+            `
+            console.log(signinError);
+      });
+    }
+
+
+    // email and pass Auth
+    // Get references to the form elements
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+
+    // Log in with email and password
+    function logIn() {
+      // Check if the email address is valid
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
+        console.error("Error: invalid email address.");
+        window.alert("メール形式が正しくありません")
+        return;
+      }
+
+      // Check if the password is strong enough
+      if (password.value.length < 8 || !/[A-Z]/.test(password.value) || !/[a-z]/.test(password.value) || !/\d/.test(password.value)) {
+        console.error("Error: password is not strong enough.");
+        window.alert("小文字、大文字、数字を含んだ8文字以上にしてください")
+        return;
+      }
+
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email.value, password.value)
+        .then(function(user) {
+          if (!user.user.emailVerified) {
+            console.log("Email is not verified. Sending verification email.");
+            user.user.sendEmailVerification().then(function() {
+              console.log("Verification email sent.");
+            }).catch(function(error) {
+              console.error("Error sending verification email:", error);
+            });
+            return;
+          }
+
+          // Handle successful login
+          console.log("Successfully logged in as:", user.user.email);
+          const userRef = firestore.collection("users").doc(user.user.uid);
+          const userData = {
+            email: user.user.email,
+            displayName: user.user.displayName,
+            createdAt: firebase.firestore.Timestamp.fromDate(new Date())
+          };
+
+          userRef.set(userData, { merge: true })
+            .then(() => {
+              console.log("User data stored in Firestore");
+            })
+            .catch((error) => {
+              console.error("Error storing user data in Firestore", error);
+            });
+        })
+        .catch(function(error) {
+          if (error.code === "auth/user-not-found") {
+            // Handle case where user is not found
+            console.log("User not found. Creating new user.");
+            firebase
+              .auth()
+              .createUserWithEmailAndPassword(email.value, password.value)
+              .then(function(user) {
+                console.log("User created. Sending verification email.");
+                user.user.sendEmailVerification().then(function() {
+                  console.log("Verification email sent.");
+                }).catch(function(error) {
+                  console.error("Error sending verification email:", error);
+                });
+              })
+              .catch(function(error) {
+                // Handle errors
+                console.error("Error creating user:", error);
+              });
+            return;
+          }
+
+          // Handle other errors
+          console.error("Error logging in:", error);
+        });
+    }
+
+    // Add an event listener to the form button
+    document.getElementById("login-button").addEventListener("click", logIn);
+
 
     </script>
   </body>
