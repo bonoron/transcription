@@ -148,7 +148,8 @@
       }
       
       .head_left_login {
-        width: 100%;
+        width: 80%;
+        margin: 0 auto;
         height: 70px;
         padding: 16px 0 0 20px;
       }
