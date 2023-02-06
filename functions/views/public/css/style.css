@@ -55,6 +55,13 @@
     margin: 0 auto;
   }
 
+  .logo {
+    background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
+    background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   header {
     max-width: 1920px;;
     width: 100%;
@@ -180,18 +187,13 @@
     position: absolute;
     top: 50%;
     left: 75%;
+    width: 350px;
     transform: translate(-50%, -50%);
     color: #f1f1f3;
   }
 
   .about_wrapper {
     height: 710px;
-    padding: 30px 4% 10px;
-    background-color: black;
-  }
-
-  .about_service_wrapper {
-    height: 700px;
     padding: 30px 4% 10px;
     background-color: black;
   }
@@ -355,32 +357,37 @@
     display: flex;
   }
 
-  .right_content {
-    width: 60%;
-    height: 100%;
-    
+  .about_service_wrapper {
+    height: 700px;
+    padding: 30px 4% 10px;
+    background-color: black;
   }
 
-  .right_content video {
+  .left_content {
+    width: 65%;
+    height: 100%;
+  }
+
+  .left_content video {
     width: 100%;
     max-height: 480px;
     height: auto;
     border-radius: 5px;
   }
 
-  .left_content {
-    width: 40%;
+  .right_content {
+    width: 35%;
     height: 100%;
-    padding: 0px 4% 10px ;
+    padding: 0px 2% 10px;
     color: #f1f1f3;
   }
 
-  .left_content h2 {
-    font-size: max(20px, 1.6vw);
+  .right_content h2 {
+    font-size: 23px;
   }
 
-  .left_content p {
-    font-size: max(14px, 0.9vw);
+  .right_content p {
+    font-size: 16px;
   }
 
   
@@ -461,6 +468,49 @@
   border: #FB6DFC 1px solid;
 }
 
+footer {
+  height: 100px;
+  background-color: black;
+}
+
+.line {
+  width: 1000px;
+  height: 10px;
+  border-top: 2px #f1f1f3 solid;
+  margin: 0 auto;
+}
+
+.footer_content {
+  width: 700px;
+  height: 90px;
+  margin: 0 auto;
+}
+
+.foot_nav {
+  text-align: center;
+}
+
+.foot_nav ul{
+  display: flex;
+}
+
+.foot_nav_item {
+  color: #f1f1f3;
+  padding: 5px;
+}
+
+footer li {
+  margin: 0 0 0 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+footer li a:hover {
+  background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
+  background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 
 

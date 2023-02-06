@@ -10,6 +10,14 @@ app.get('/', (req, res) => {
     res.render('top.ejs');
 });
 
+app.get('/mypage', (req, res) => {
+    res.render('mypage.ejs');
+});
+
+app.get('/signin', (req, res) => {
+    res.render('signin.ejs');
+});
+
 //exports.app = functions.https.onRequest(app);
 //exports.app = functions.region('asia-northeast1').https.onRequest(app);
 exports.app = functions.region('asia-northeast1').https.onRequest(app);

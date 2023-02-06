@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Invest</title>
+    <link rel="stylesheet" href="./public/css/style_page.css">
+    <script src="/send_url.js"></script>
+    <script src="https://kit.fontawesome.com/8817c22d4f.js" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth__ja.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+  </head>
+  <body>
+    <div class="login_menu">
+      <div class="container">
+        <div class="head_left_login">
+          <a href="./">Transcription</a>
+        </div>
+        <div class="auth_page">
+          <h1 style="text-align: center;">ログイン</h1>
+          <div class="auth">
+            <button class="btn google" type="submit" onclick="signIn_google()">
+              <img src="public/images/icon/google_icon.svg" width="23" height="23">　Googleでログイン
+            </button>
+            <div class="email_auth">
+              <p>メールアドレス</p>
+              <input type="text" id="email" class="email" placeholder="メールアドレスを入力">
+              <p style="padding-top: 15px;">パスワード</p>
+              <input type="password" id="password" class="password" placeholder="パスワードを入力">
+              <button id="btn" class="btn_email" type="submit" onclick="signUp()">
+                ログイン
+              </button>
+              <a class="reset_password" href="./">パスワードをお忘れですか？</a><br>
+              <div class="message_login">
+                <p>Googleの<a href="https://policies.google.com/privacy">プライバシーポリシー</a>と<a href="https://policies.google.com/terms">利用規約</a>が適用されます。</p>
+                <p>同意したうえで、ログインを行ってください。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="container">
+        <div class="login_footer">
+          <div class="login_box">
+          
+          </div>
+          <div class="login_box">
+            <a class="create_password" href="./">アカウントを新規作成</a>
+          </div>
+        </div>        
+      </div>
+    </footer>
+    <script>      
+      const firebaseConfig = {
+        apiKey: "AIzaSyAJGyDAkuzU2C9Psr0X_iljcJgJpvi2O24",
+        authDomain: "transcription-2e6e2.firebaseapp.com",
+        projectId: "transcription-2e6e2",
+        storageBucket: "transcription-2e6e2.appspot.com",
+        messagingSenderId: "118222486071",
+        appId: "1:118222486071:web:c9571aec0e456c0e949db2",
+        measurementId: "G-XWMY98DN1D"
+        };
+      // firebase の初期化
+      firebase.initializeApp(firebaseConfig);
+
+      var provider = new firebase.auth.GoogleAuthProvider();
+      function signIn_google() {
+        firebase.auth().signInWithPopup(provider)
+        .then(result => {
+            console.log('ログインしました。');
+            
+        }).catch(error => {
+              const signinError = `
+              サインインエラー
+              エラーメッセージ： ${error.message}
+              エラーコード: ${error.code}
+              `
+              console.log(signinError);
+        });
+      }
+
+    </script>
+  </body>
+</html>
