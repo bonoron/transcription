@@ -94,6 +94,8 @@
             .catch((error) => {
               console.error("Error storing user data in Firestore", error);
             });
+            window.location.replace("./mypage");
+
       }).catch(error => {
             const signinError = `
             サインインエラー
@@ -134,7 +136,7 @@
             console.log("Email is not verified. Sending verification email.");
             user.user.sendEmailVerification().then(function() {
               console.log("Verification email sent.");
-              window.alert("確認メールをお送りしました。")
+              window.location.replace("./email");
             }).catch(function(error) {
               console.error("Error sending verification email:", error);
             });
@@ -157,6 +159,8 @@
             .catch((error) => {
               console.error("Error storing user data in Firestore", error);
             });
+            window.location.replace("./mypage");
+
         })
         .catch(function(error) {
           if (error.code === "auth/user-not-found") {

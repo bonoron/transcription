@@ -25,7 +25,28 @@
                     <li><a href="#" class="nav_item">SERVICE</a></li>
                     <li><a href="#" class="nav_item">PRICE</a></li>
                     <li><a href="#" class="nav_item">CONTACT</a></li>
-                    <li><a href="./signin" class="login_btn" id="login">LOG IN</a></li>
+
+                    <button id="openModel" class="openModel">Log in</button>
+                    <section id="modelArea" class="modelArea">
+                        <div id="modelBg" class="modelBg"></div>
+                        <div class="modelWrapper">
+                            <div class="modelContents">
+                                <h1 style="text-align: center;">Transcription</h1>
+                                <p>Transctiptionは最新AI技術による文字起こしサービス<br>約95%の精度で音声を認識することが可能</p>
+                                <button class="btn_google" type="submit" onclick="signIn_google()">
+                                    <img src="public/images/icon/google_icon.svg" width="23" height="23">　Googleでログイン
+                                </button>
+                                <div class="message_login">
+                                    <p>Googleの<a href="https://policies.google.com/privacy">プライバシーポリシー</a>と<a href="https://policies.google.com/terms">利用規約</a>が適用されます。</p>
+                                    <p>同意したうえで、ログインを行ってください。</p>
+                                </div>
+                            </div>
+                            <div id="closeModel" class="closeModel" style="font-size: 20px;">
+                            ×
+                            </div>
+                        </div>
+                    </section>
+
                 </ul>
             </nav>
         </header>
@@ -40,7 +61,7 @@
                     ほぼ誤りなく、音声を文字起こし可能。</p>
                 <br>
                 <h3>・利用料金の安さ</h3>
-                <p>1時間の使用につき、1000円で利用可能。<br>
+                <p>1時間の使用につき、600円で利用可能。<br>
                     議事録作成を、圧倒的に早く安く実現。</p>
                 <br>
                 <a href="./" class="login_btn_free">無料ではじめる →</a>
@@ -233,5 +254,43 @@
             </div>
         </footer>
     </div>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./popup.js"></script>
+    <script src="./config.js"></script>
+    <script>
+        const firestore = firebase.firestore();
+        // Google Auth
+        var provider = new firebase.auth.GoogleAuthProvider();
+        function signIn_google() {
+        firebase.auth().signInWithPopup(provider)
+        .then(result => {
+            console.log('ログインしました。');
+            console.log(result);
+            const userRef = firestore.collection("users").doc(result.user.uid);
+            const userData = {
+                email: result.user.email,
+                displayName: result.user.displayName,
+                createdAt: firebase.firestore.Timestamp.fromDate(new Date())
+            };
+
+            userRef.set(userData, { merge: true })
+                .then(() => {
+                console.log("User data stored in Firestore");
+                })
+                .catch((error) => {
+                console.error("Error storing user data in Firestore", error);
+                });
+                window.location.replace("./mypage");
+
+        }).catch(error => {
+                const signinError = `
+                サインインエラー
+                エラーメッセージ： ${error.message}
+                エラーコード: ${error.code}
+                `
+                console.log(signinError);
+        });
+        }
+    </script>
   </body>
 </html>

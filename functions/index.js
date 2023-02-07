@@ -18,18 +18,7 @@ app.get('/signin', (req, res) => {
     res.render('signin.ejs');
 });
 
-app.get("/send-verification-email", (req, res) => {
-    const user = firebase.auth().currentUser;
-    user.sendEmailVerification().then(() => {
-      // Render the "sent email verification" page
-      res.render("auth/sent-verification-email", { email: user.email });
-    }).catch(error => {
-      // Handle errors
-      console.error("Error sending verification email:", error);
-      res.render("auth/error", { error: "Error sending verification email." });
-    });
-  });
-  
+
 
 //exports.app = functions.https.onRequest(app);
 //exports.app = functions.region('asia-northeast1').https.onRequest(app);

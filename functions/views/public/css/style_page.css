@@ -71,6 +71,7 @@
     background-color: #FBFBFA;
     padding: 5px 1% 10px;
     color: black;
+    border-right: #bfc4cc 2px solid;
     }
 
     .fixed_area::-webkit-scrollbar{
@@ -284,7 +285,18 @@
         padding-left: 25px;
       }
 
-      
+      .email_main {
+        height: 400px;
+        width: 100%;
+        color: #2d3133;
+      }
+
+      .email_message {
+        width: 50%;
+        height: 400px;
+        margin: 0 auto;
+        background-color: yellowgreen;
+      }
       
 
 
