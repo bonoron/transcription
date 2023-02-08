@@ -29,9 +29,8 @@
             
         </div><!--左固定エリア-->
         <div id="container">
-          <div id="table">
-
-          </div>
+          <div id="dataContainer"></div>
+          <button id="saveButton">Save Changes</button>
         </div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
@@ -51,33 +50,79 @@
         <script>
           var storage = firebase.storage();
           var storageRef = storage.ref();
-          var excelFileRef = storageRef.child('test.csv');
+          var jsonRef = storageRef.child('test.json');
 
-          excelFileRef.getDownloadURL().then(function(url) {
-            console.log(url);
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'arraybuffer';
-            
-            console.log("VVVVVVVVVVVV");
-            xhr.onload = function(e) {
-              var data = new Uint8Array(this.response);
-              var workbook = XLSX.read(data, {type:'array'});
-              var firstSheetName = workbook.SheetNames[0];
-              var worksheet = workbook.Sheets[firstSheetName];
-              var jsonData = XLSX.utils.sheet_to_json(worksheet);
+          jsonRef.getDownloadURL().then(function(url) {
+            // Fetch the JSON data
+            fetch(url)
+              .then(function(response) {
+                return response.json();
+              })
+              .then(function(data) {
+                  // Sort the data based on the Column1 field
+                  data.sort(function(a, b) {
+                    return a.Column1 - b.Column1;
+                  });
 
-              // Do something with the JSON data
-            };
+                  // Display the sorted JSON data
+                  var dataContainer = document.getElementById("dataContainer");
+                  var output = '<table>';
+                  output += '<tr>';
+                  output += '<th>Column1</th>';
+                  output += '<th>Start</th>';
+                  output += '<th>End</th>';
+                  output += '<th>Speaker</th>';
+                  output += '<th>Text</th>';
+                  output += '</tr>';
+                  for (var i = 0; i < data.length; i++) {
+                    output += '<tr>';
+                    output += '<td>' + data[i].Column1 + '</td>';
+                    output += '<td>' + data[i].Start + '</td>';
+                    output += '<td>' + data[i].End + '</td>';
+                    output += '<td>' + data[i].Speaker + '</td>';
+                    output += '<td><div class="editable-cell" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Text + '</div></td>';
+                    output += '</tr>';
+                  }
+                  output += '</table>';
+                  dataContainer.innerHTML = output;
+                });
+            });
+            // Save Changes Button Event Listener
+            document.getElementById("saveButton").addEventListener("click", function() {
+              // Get all the table cells
+              var cells = document.querySelectorAll("table td input");
 
-            xhr.send();
-            
-            
-            // URL of the Excel file
-          }).catch(function(error) {
-            console.log(error);
-            // Handle any errors
-          });
+              // Create an array to store the edited data
+              var newData = [];
+              for (var i = 0; i < cells.length; i += 5) {
+                newData.push({
+                  Column1: cells[i].value,
+                  Start: cells[i + 1].value,
+                  End: cells[i + 2].value,
+                  Speaker: cells[i + 3].value,
+                  Text: cells[i + 4].value
+                });
+              }
+
+              // Upload the edited data as a JSON file to Firebase Storage
+              var file = new Blob([JSON.stringify(newData)], {type: "application/json"});
+              var metadata = {
+                contentType: "application/json"
+              };
+              jsonRef.put(file, metadata).then(function(snapshot) {
+                console.log("Data has been saved to Firebase Storage");
+              });
+            });
+
+             // Function to enable editing on mouse over
+            function enableEdit(element) {
+              element.contentEditable = true;
+            }
+
+            // Function to disable editing on mouse out
+            function disableEdit(element) {
+              element.contentEditable = false;
+            }
         </script>
   </body>
 </html>
