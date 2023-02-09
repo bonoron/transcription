@@ -62,11 +62,6 @@
   th {
     background-color: #f2f2f2;
   }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 5px;
-  }
   
   
   /* top ================================ */
@@ -318,8 +313,125 @@
         margin: 0 auto;
         background-color: yellowgreen;
       }
-      
 
+      .dataContainer {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .table_sub_exp li{
+        float: left;
+        margin-right: 5px;
+        font-size: 9px;
+      }
+
+      .head_main {
+        height: 250px;
+        width: 90%;
+        max-width: 1600px;
+        
+        margin: 0 auto;
+      }
+
+      .head_title {
+        height: 100px;
+      }
+
+      .speaker {
+        font-size: 15px;
+        font-weight: bold;
+        padding: 0 10px;
+      }
+
+      .editable-cell {
+        padding-left: 40px;
+      }
+      
+      .time {
+        margin-top: 5px;
+      }
+
+      .circle {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+      }
+
+      .oldName {
+        position: relative;
+        margin-right: 25px;
+    }
+    
+    .oldName::before,
+    .oldName::after {
+        position: absolute;
+        content: '';
+        pointer-events: none;
+    }
+    
+    .oldName::before {
+        display: inline-block;
+        right: 0;
+        width: 2.8em;
+        height: 2.8em;
+        border-radius: 0 3px 3px 0;
+        
+    }
+    
+    .oldName::after {
+        position: absolute;
+        top: 50%;
+        right: 1.4em;
+        transform: translate(50%, -50%) rotate(45deg);
+        width: 6px;
+        height: 6px;
+        border-bottom: 3px solid #fff;
+        border-right: 3px solid #fff;
+    }
+    
+    .oldName select {
+        appearance: none;
+        min-width: 200px;
+        height: 2.5em;
+        padding: .4em 3.6em .4em .8em;
+        border: none;
+        border-radius: 3px;
+        background-color: #e6edf3;
+        font-size: 1em;
+        cursor: pointer;
+    }
+    
+    .oldName select:focus {
+        outline: 2px solid #2589d0;
+    }
+
+    .newName {
+      width: 200px;
+      height: 2.5em;
+      margin-right: 30px;
+      background-color: #e6edf3;
+      border: none;
+      border-radius: 3px;
+      font-size: 16px;
+      padding: 5px;
+    }
+
+    .select_name {
+      
+      height: 100px;
+    }
+
+      .update {
+        width: 5em;
+        height: 2.5em;
+        padding: 5px;
+        font-size: 16px;
+        background-color: #e6edf3;
+        border: none;
+        border-radius: 3px;
+      }
+
+      
 
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 

@@ -28,9 +28,28 @@
             </div>
             
         </div><!--左固定エリア-->
+
+        <!--右エリア-->
         <div id="container">
-          <div id="dataContainer"></div>
-          <button id="saveButton">Save Changes</button>
+          <div class="head_main">
+            <div class="head_title">
+              <h1>開発中</h1>
+            </div>
+            <div class="select_name">
+              <h3>話者名の変更</h3>
+              <label class="oldName">変更前:
+                <select id="oldName">
+                  <option hidden>選択してください</option>
+                  <!-- dynamically populate options with names from the Speaker column -->
+                  <!-- you would use JavaScript to loop through the JSON data and create options for each name -->
+                </select>
+              </label>
+              <label>新しい名前: <input type="text" id="newName" class="newName" placeholder="好きな名前を入力"></label>
+              <button onclick="updateSpeaker(document.getElementById('oldName').value, document.getElementById('newName').value)" class="update">更新</button>
+            </div>
+          </div>
+          <div id="dataContainer" class="dataContainer"></div>
+          <button id="saveButton" onclick="saveData()">Save</button>
         </div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
@@ -51,6 +70,31 @@
           var storage = firebase.storage();
           var storageRef = storage.ref();
           var jsonRef = storageRef.child('test.json');
+          var palette = ["c03221","dc9590","f2d0a4","cbb499","A3978D","7C7B81","545E75","4A7071","3F826D","508d7a"];
+
+          // Function to retrieve the data from the JSON file
+          function getData() {
+              var storage = firebase.storage();
+              var storageRef = storage.ref();
+              var jsonRef = storageRef.child('test.json');
+              jsonRef
+                .getDownloadURL()
+                .then(function (url) {
+                  fetch(url)
+                    .then(function (response) {
+                      return response.json();
+                    })
+                    .then(function (data) {
+                      // Do something with the data here, like render it in the HTML
+                      window.data = data;
+                    });
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            }
+
+            getData();
 
           jsonRef.getDownloadURL().then(function(url) {
             // Fetch the JSON data
@@ -59,60 +103,73 @@
                 return response.json();
               })
               .then(function(data) {
+                  var select = document.getElementById("oldName");
+                  // Create a set to store the unique names from the Speaker column
+                  var speakerNames = new Set();
+                  // Loop through the data and add each Speaker name to the set
+                  data.forEach(function(record) {
+                    speakerNames.add(record.Speaker);
+                  });
+
+                  // Loop through the unique names and create an option for each one
+                  speakerNames.forEach(function(name) {
+                    var option = document.createElement("option");
+                    option.value = name;
+                    option.text = name;
+                    select.add(option);
+                  });
+
                   // Sort the data based on the Column1 field
                   data.sort(function(a, b) {
                     return a.Column1 - b.Column1;
                   });
 
+                  var speakerNamesArray = Array.from(speakerNames);
                   // Display the sorted JSON data
                   var dataContainer = document.getElementById("dataContainer");
-                  var output = '<table>';
-                  output += '<tr>';
-                  output += '<th>Column1</th>';
-                  output += '<th>Start</th>';
-                  output += '<th>End</th>';
-                  output += '<th>Speaker</th>';
-                  output += '<th>Text</th>';
-                  output += '</tr>';
+                  var output = '<div class="table_main">';
                   for (var i = 0; i < data.length; i++) {
-                    output += '<tr>';
-                    output += '<td>' + data[i].Column1 + '</td>';
-                    output += '<td>' + data[i].Start + '</td>';
-                    output += '<td>' + data[i].End + '</td>';
-                    output += '<td>' + data[i].Speaker + '</td>';
-                    output += '<td><div class="editable-cell" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Text + '</div></td>';
-                    output += '</tr>';
+                    output += '<div class="table_sub">';
+                    output += '<div class="table_sub_exp">';
+                    output += '<ul>';
+                    output += '<li><p class="circle" style="background-color: #'+palette[speakerNamesArray.indexOf(data[i].Speaker)]+';"></p></li>'
+                    output += '<li><p class="speaker" id="speaker'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Speaker + '</p></li>';
+                    output += '<li><p class="time">' + data[i].Start + '</p></li>';
+                    output += '<li><p class="time">' + data[i].End + '</p></li>';
+                    output += '</ul>';
+                    output += '</div><br>';
+                    output += '<div class="editable-cell" id="'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Text + '</div>';
+                    output += '</div>';
+                    output += '<br>';
                   }
-                  output += '</table>';
+                  output += '</div>';
                   dataContainer.innerHTML = output;
                 });
             });
+
+            
             // Save Changes Button Event Listener
-            document.getElementById("saveButton").addEventListener("click", function() {
-              // Get all the table cells
-              var cells = document.querySelectorAll("table td input");
-
-              // Create an array to store the edited data
-              var newData = [];
-              for (var i = 0; i < cells.length; i += 5) {
-                newData.push({
-                  Column1: cells[i].value,
-                  Start: cells[i + 1].value,
-                  End: cells[i + 2].value,
-                  Speaker: cells[i + 3].value,
-                  Text: cells[i + 4].value
-                });
+            // Function to save the changes to the JSON file
+            function saveData(index, text) {
+              // Get the data from the global variable
+              var data = window.data;
+              for (var i = 0; i < data.length; i++) {
+              // Update the text data for the specified index
+                data[i].Speaker = document.getElementById("speaker"+i).textContent;
+                data[i].Text = document.getElementById(i).textContent;
               }
-
-              // Upload the edited data as a JSON file to Firebase Storage
-              var file = new Blob([JSON.stringify(newData)], {type: "application/json"});
-              var metadata = {
-                contentType: "application/json"
-              };
-              jsonRef.put(file, metadata).then(function(snapshot) {
-                console.log("Data has been saved to Firebase Storage");
-              });
-            });
+              console.log(data);
+              // Save the updated data to the JSON file
+              var jsonRef = storage.ref("test.json");
+              jsonRef
+                .putString(JSON.stringify(data))
+                .then(function () {
+                  console.log("File saved successfully!");
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            }
 
              // Function to enable editing on mouse over
             function enableEdit(element) {
@@ -123,6 +180,79 @@
             function disableEdit(element) {
               element.contentEditable = false;
             }
+
+          // Function to update the Speaker name
+          function updateSpeaker(oldName, newName) {
+            // Get the data from the global variable
+            var data = window.data;
+            // Loop through all the data to find instances of the old name
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].Speaker === oldName) {
+                // Update the Speaker name to the new name
+                data[i].Speaker = newName;
+              }
+            }
+            // Save the updated data to the JSON file
+            var jsonRef = storage.ref("test.json");
+            jsonRef
+              .putString(JSON.stringify(data))
+              .then(function () {
+                console.log("File saved successfully!");
+                function removeChildren(x){
+                    if (x.hasChildNodes()) {
+                      while (x.childNodes.length > 0) {
+                        x.removeChild(x.firstChild)
+                      }
+                    }
+                  }
+                  removeChildren(document.getElementById("oldName"));
+                  var select = document.getElementById("oldName");
+                  // Create a set to store the unique names from the Speaker column
+                  var speakerNames = new Set();
+                  // Loop through the data and add each Speaker name to the set
+                  data.forEach(function(record) {
+                    speakerNames.add(record.Speaker);
+                  });
+
+                  // Loop through the unique names and create an option for each one
+                  speakerNames.forEach(function(name) {
+                    var option = document.createElement("option");
+                    option.value = name;
+                    option.text = name;
+                    select.add(option);
+                  });
+                // Update the HTML to reflect the changes
+                //displayData();
+                data.sort(function(a, b) {
+                    return a.Column1 - b.Column1;
+                  });
+
+                  // Display the sorted JSON data
+                  var speakerNamesArray = Array.from(speakerNames);
+                  var dataContainer = document.getElementById("dataContainer");
+                  var output = '<div class="table_main">';
+                  for (var i = 0; i < data.length; i++) {
+                    output += '<div class="table_sub">';
+                    output += '<div class="table_sub_exp">';
+                    output += '<ul>';
+                    output += '<li><p class="circle" style="background-color: #'+palette[speakerNamesArray.indexOf(data[i].Speaker)]+';"></p></li>';                   
+                    output += '<li><p class="speaker" id="speaker'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Speaker + '</p></li>';
+                    output += '<li><p class="time">' + data[i].Start + '</p></li>';
+                    output += '<li><p class="time">' + data[i].End + '</p></li>';
+                    output += '</ul>';
+                    output += '</div><br>';
+                    output += '<div class="editable-cell" id="'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Text + '</div>';
+                    output += '</div>';
+                    output += '<br>';
+                  }
+                  output += '</div>';
+                  dataContainer.innerHTML = output;
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }
+
         </script>
   </body>
 </html>
