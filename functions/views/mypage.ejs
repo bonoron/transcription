@@ -23,10 +23,28 @@
             </div>
             <div class="bottom_content">
                 <ul>
-                    <li><p>23年1月_部会冒頭.wav</p></li>
+                  <div id="fileContainer"></div>
                 </ul>
             </div>
-            
+            <button id="openModel" class="openModel">Log in</button>
+            <section id="modelArea" class="modelArea">
+                <div id="modelBg" class="modelBg"></div>
+                <div class="modelWrapper">
+                  <h1 style="text-align: center;">音声・動画のアップロード</h1>
+                  <div id="fileDropArea" class="fileDropArea">
+                    <h2>Drag and drop</h2>
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 40px;"></i><br>
+                    <p></p>
+                    <label class="file_deco"><input type="file" id="fileInput">ファイルを選択</label>
+                    <p class="file_message" id="file_message">選択されていません</p>
+                  </div>
+                  <div id="closeModel" class="closeModel" style="font-size: 20px;">
+                  ×
+                  </div>
+                  <button id="uploadButton">Upload</button>
+                </div>
+            </section>
+              
         </div><!--左固定エリア-->
 
         <!--右エリア-->
@@ -36,23 +54,29 @@
               <h1>開発中</h1>
             </div>
             <div class="select_name">
-              <h3>話者名の変更</h3>
-              <label class="oldName">変更前:
+              <h3 style="padding-bottom: 10px;">話者名の変更</h3>
+              <label class="oldName">変更前：
                 <select id="oldName">
                   <option hidden>選択してください</option>
                   <!-- dynamically populate options with names from the Speaker column -->
                   <!-- you would use JavaScript to loop through the JSON data and create options for each name -->
                 </select>
               </label>
-              <label>新しい名前: <input type="text" id="newName" class="newName" placeholder="好きな名前を入力"></label>
+              <label>新しい名前： <input type="text" id="newName" class="newName" placeholder="好きな名前を入力"></label>
               <button onclick="updateSpeaker(document.getElementById('oldName').value, document.getElementById('newName').value)" class="update">更新</button>
+              <div class="name_container">
+                <h4>話者：</h4>
+                <p id="name_tag"></p>
+              </div>
             </div>
           </div>
           <div id="dataContainer" class="dataContainer"></div>
-          <button id="saveButton" onclick="saveData()">Save</button>
+          <button id="saveButton" class="saveButton" onclick="saveData()"><i class="fa-solid fa-pen" style="margin-right: 5px;"></i>Save</button>
         </div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
+        <script src="./popup.js"></script>
+        <script src="file_name.js"></script>
         <script>
             $(window).on('load resize', function() {
             var windowWidth = window.innerWidth;
@@ -64,6 +88,19 @@
             } 
             });
         </script>
+        <script>
+          const dropArea = document.querySelector('.fileDropArea');
+        
+          dropArea.addEventListener('dragenter', e => {
+            e.preventDefault();
+            dropArea.classList.add('drag-enter');
+          });
+        
+          dropArea.addEventListener('dragleave', e => {
+            e.preventDefault();
+            dropArea.classList.remove('drag-enter');
+          });
+        </script>        
         <script src="js/6-4.js"></script>
         <script src="./config.js"></script>
         <script>
@@ -123,8 +160,10 @@
                   data.sort(function(a, b) {
                     return a.Column1 - b.Column1;
                   });
-
+                  
                   var speakerNamesArray = Array.from(speakerNames);
+                  var name_tag = document.getElementById("name_tag");
+                  name_tag.innerHTML = speakerNamesArray;
                   // Display the sorted JSON data
                   var dataContainer = document.getElementById("dataContainer");
                   var output = '<div class="table_main">';
@@ -229,6 +268,9 @@
 
                   // Display the sorted JSON data
                   var speakerNamesArray = Array.from(speakerNames);
+                  var name_tag = document.getElementById("name_tag");
+                  name_tag.innerHTML = speakerNamesArray;
+                  
                   var dataContainer = document.getElementById("dataContainer");
                   var output = '<div class="table_main">';
                   for (var i = 0; i < data.length; i++) {
@@ -252,7 +294,150 @@
                 console.log(error);
               });
           }
+          // Get references to the file drop area and file input
+          const fileDropArea = document.getElementById("fileDropArea");
+          const fileInput = document.getElementById("fileInput");
 
+          // Listen for file drop events on the file drop area
+          fileDropArea.addEventListener("drop", handleFileDrop);
+          fileDropArea.addEventListener("dragover", handleFileDragOver);
+
+          // Listen for change events on the file input
+          fileInput.addEventListener("change", handleFileInputChange);
+
+          // Get reference to the upload button
+          const uploadButton = document.getElementById("uploadButton");
+
+          // Listen for click events on the upload button
+          uploadButton.addEventListener("click", handleUploadButtonClick);
+
+          // Handle file drop events
+          function handleFileDrop(e) {
+            e.preventDefault();
+
+            // Get the first file that was dropped
+            const file = e.dataTransfer.files[0];
+            const text = document.getElementById("file_message");
+            document.getElementById("file_message").textContent = file.name;
+            console.log(file.name);
+
+            // Trigger the change event on the file input
+            fileInput.files = e.dataTransfer.files;
+          }
+
+          // Handle file drag over events
+          function handleFileDragOver(e) {
+            e.preventDefault();
+            const text = document.getElementById("file_message");
+            document.getElementById("file_message").textContent = file.name;
+          }
+
+          // Handle file input change events
+          function handleFileInputChange(e) {
+            // Get the first file that was selected
+            const file = e.target.files[0];
+            const text = document.getElementById("file_message");
+            document.getElementById("file_message").textContent = file.name;
+          }
+          
+          // Handle upload button click events
+          function handleUploadButtonClick() {
+            // Get the file to upload
+            const file = fileInput.files[0];
+
+            // Get the current user's ID
+            const userId = firebase.auth().currentUser.uid;
+            
+            // Generate a unique file name for the uploaded file
+            const fileName = `${userId}/${file.name}`;
+
+            // Get a reference to the Firebase Storage location where the file will be uploaded
+            const storageRef = firebase.storage().ref(fileName);
+
+            // Upload the file
+            const task = storageRef.put(file);
+            
+            // Monitor the upload progress
+            task.on("state_changed", function(snapshot) {
+              // Update the upload progress
+            }, function(error) {
+              // Handle any errors
+            }, function() {
+              // Upload complete, retrieve the URL for the uploaded file
+              task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                // Store the URL in the database
+                console.log("upload the file success.");
+                // Get the current date and time
+                var uploadTime = new Date();
+
+                // Get the user ID from Firebase
+                var userId = firebase.auth().currentUser.uid;
+                // Store the file name and playback time in variables
+                var fileName = file.name;
+
+                const storage = firebase.storage();
+                const fileRef = storage.ref(`${userId}/${fileName}`);
+                
+                storageRef.getDownloadURL().then(function(url) {
+                  // Create an HTML audio element to play the file
+                  var audio = new Audio(url);
+                  
+                  // Wait for the audio to load the metadata
+                  audio.addEventListener("loadedmetadata", function() {
+                    // Get the playback time of the audio
+                    var playbackTime = audio.duration;
+
+                    // Do something with the playback time
+                    console.log("Playback time:", playbackTime);
+                    // Create a reference to the Firestore database
+                    var db = firebase.firestore();
+                    var userRef = db.collection("users").doc(userId).collection("FileName");
+  
+                    // Add the file name, upload time, and playback time to the Firestore database
+                    userRef.add({
+                      fileName: fileName,
+                      uploadTime: uploadTime,
+                      playbackTime: playbackTime
+                    })
+                    .then(function() {
+                      console.log("Data added successfully to Firestore database");
+                    })
+                    .catch(function(error) {
+                      console.error("Error writing document: ", error);
+                    });
+                  });
+                }).catch(function(error) {
+                  // Handle any errors that occur while retrieving the file
+                  console.error(error);
+                });
+                
+
+                
+              });
+            });
+          }
+
+          firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              var userId = user.uid;
+              console.log("User ID: ", userId);
+              // Get a reference to the firestore database
+              const db = firebase.firestore();
+              // Get a reference to the file in the firestore database
+              const userRef = db.collection("users").doc(userId);
+              const filesRef = userRef.collection("FileName")
+
+              filesRef.get().then(function(querySnapshot) {
+                querySnapshot.forEach(function(fileDoc) {
+                  console.log("File data:", fileDoc.data().fileName);
+                });
+              }).catch(function(error) {
+                console.error("Error getting documents:", error);
+              });
+            } else {
+              console.log("No such document!");
+            }
+          });
         </script>
   </body>
 </html>

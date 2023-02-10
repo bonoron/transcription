@@ -315,7 +315,7 @@
       }
 
       .dataContainer {
-        width: 80%;
+        width: 75%;
         margin: 0 auto;
       }
 
@@ -329,12 +329,30 @@
         height: 250px;
         width: 90%;
         max-width: 1600px;
-        
+        background-color: yellowgreen;
         margin: 0 auto;
       }
 
       .head_title {
         height: 100px;
+        background-color: #2589d0;
+      }
+
+      .saveButton {
+        position: fixed;
+        bottom: 20px;
+        right: 10px;
+        font-weight: bold;
+        font-size: 1em;
+        letter-spacing: 0.1em;
+        text-decoration: none;
+        color: #ffffff;
+        display: inline-block;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        background: #384878;
+        box-shadow: 3px 3px #d3d5da;
       }
 
       .speaker {
@@ -358,35 +376,8 @@
       }
 
       .oldName {
-        position: relative;
-        margin-right: 25px;
-    }
-    
-    .oldName::before,
-    .oldName::after {
-        position: absolute;
-        content: '';
-        pointer-events: none;
-    }
-    
-    .oldName::before {
-        display: inline-block;
-        right: 0;
-        width: 2.8em;
-        height: 2.8em;
-        border-radius: 0 3px 3px 0;
         
-    }
-    
-    .oldName::after {
-        position: absolute;
-        top: 50%;
-        right: 1.4em;
-        transform: translate(50%, -50%) rotate(45deg);
-        width: 6px;
-        height: 6px;
-        border-bottom: 3px solid #fff;
-        border-right: 3px solid #fff;
+        margin-right: 25px;
     }
     
     .oldName select {
@@ -413,12 +404,12 @@
       border: none;
       border-radius: 3px;
       font-size: 16px;
-      padding: 5px;
+      padding: .4em 3.6em .4em .8em;
     }
 
     .select_name {
-      
-      height: 100px;
+      background-color: #FB6DFC;
+      height: 120px;
     }
 
       .update {
@@ -431,6 +422,171 @@
         border-radius: 3px;
       }
 
+      .name_container {
+        display: flex;
+        padding-top: 10px;
+      }
+
+      #fileDropArea {
+        border: 2px dashed #ccc;
+        border-radius: 20px;
+        width: 90%;
+        height: 70%;
+        text-align: center;
+        padding-top: 60px;
+        font-size: 20px;
+        color: #ccc;
+        margin: 0 auto;
+      }
+
+      #fileDropArea:hover {
+        background-color: #f9f9f9;
+        border-color: #384878;
+        cursor: pointer;
+      }
+
+      .file_deco {
+        padding: 10px 40px;
+        background-color: #384878;
+        cursor: pointer;
+        font-size: 15px;
+        margin-top: 25px;
+        border-radius: 3px;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .file_message {
+        margin: 10px 0 0 0; 
+        font-size: 15px;
+      }
+
+      #uploadButton {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
+        padding: 1em 2em;
+        width: 200px;
+        font-size: 18px;
+        font-weight: 700;
+        background-color: #384878;
+        color: #f1f1f3;
+        border-radius: 50vh;
+        margin-top: 15px;
+      }
+      
+      #uploadButton::after {
+        content: '';
+        width: 5px;
+        height: 5px;
+        border-top: 3px solid #f1f1f3;
+        border-right: 3px solid #f1f1f3;
+        transform: rotate(45deg);
+      }
+      
+      #uploadButton:hover {
+        text-decoration: none;
+        background-color: #46537a;
+      }
+
+
+      .modelArea {
+        display: none;
+        position: fixed;
+        z-index: 10; /*サイトによってここの数値は調整 */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      
+      .modelBg {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(30,30,30,0.9);
+      }
+      
+      .modelWrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform:translate(-50%,-50%);
+        width: 70%;
+        height: 70%;
+        padding: 10px 30px;
+        background-color: #fff;
+        border-radius: 10px;
+      }
+      
+      .closeModel {
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+        cursor: pointer;
+      }
+      
+      
+      /* 以下ボタンスタイル */
+      button {
+        cursor: pointer;
+      }
+      
+      .openModel {
+        color: #f1f1f3;
+        font-weight: bold;
+        margin: 0 0 0 20px;
+        font-size: 16px;
+        background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
+        background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
+        border-radius: 4px;
+        padding: 8px 13px;
+        border: transparent 1px solid;
+      }
+      
+      .openModel:hover {
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        border: #FB6DFC solid 1px;
+      }
+      
+      .btn_google {
+        width: 100%;
+        height: 50px;
+        font-size: 17px;
+        display: flex;
+        padding: 13px 0 0 120px;
+        font-weight: bold;
+        border-radius: 3px;
+        border: #bfc4cc solid 0.5px;
+        margin: 20px 0;
+      }
+      
+      .message_login {
+        color: black;
+        font-size: 14px;
+      }
+      
+      .message_login a{
+        color: black;
+        display: inline-block;
+        text-decoration: underline;
+        font-size: 14px;
+      }
+      
+      .modelContents h1{
+        font-size: 25px;
+        background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
+        background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .modelContents p{
+        color: black;
+      }
       
 
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
