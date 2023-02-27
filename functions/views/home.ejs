@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInvest</title>
+    <link rel="stylesheet" href="./public/css/style_home.css">
+    <script src="/send_url.js"></script>
+    <script src="https://kit.fontawesome.com/8817c22d4f.js" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+  </head>
+  <body>
+    <!--loading screen-->
+    <div class="loader">
+      <div class="wrapper">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="shadow"></div>
+        <div class="shadow"></div>
+        <div class="shadow"></div>
+        <span>Loading</span>
+      </div>
+    </div>
+    <header>
+      <div class="container">
+        <div class="head_container">
+          <div class="head_left">
+            <h2>Transcription</h2>
+          </div>
+          <div class="head_right">
+            <div class="head_right_contents">
+              <button id="openModel" class="openModel"><i class="fa-solid fa-cloud-arrow-up" style="margin-right: 10px;"></i>アップロード</button>
+              <section id="modelArea" class="modelArea">
+                  <div id="modelBg" class="modelBg"></div>
+                  <div class="modelWrapper">
+                    <h1 style="text-align: center;">音声・動画のアップロード</h1>
+                    <div id="fileDropArea" class="fileDropArea">
+                      <h2>Drag and drop</h2>
+                      <i class="fa-solid fa-cloud-arrow-up" style="font-size: 10vh;"></i><br>
+                      <p></p>
+                      <label class="file_deco"><input type="file" id="fileInput">ファイルを選択</label>
+                      <p class="file_message" id="file_message">選択されていません</p>
+                    </div>
+                    <div id="closeModel" class="closeModel" style="font-size: 40px;">
+                    ×
+                    </div>
+                    <button id="uploadButton">Upload</button>
+                  </div>
+              </section>
+              <button id="recordButton"><i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>レコーディング</button>
+              <div id="user-profile-header">
+                <img id="user-photo-header" src="" alt="User photo" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div id="wrapper">
+      <div id="fixed-area">
+        <div id="user-profile">
+          <img id="user-photo" src="" alt="User photo" />
+          <p id="user-name" style="font-weight: 550; font-size: 13.5px;"></p>
+        </div>
+        <div class="selection_leftarea">
+          <ul>
+            <li class="selected"><h4>プロジェクト一覧</h4></li>
+            <li class="non_selected"><h4>使い方</h4></li>
+            <li class="non_selected"><h4>お支払い情報</h4></li>
+            <li class="non_selected"><h4>お問い合わせ</h4></li>
+          </ul>
+        </div>
+        <div class="used_time">
+          <h4 style="font-size: 13.5px;">使用時間</h4>
+          <div class="full-circle">
+            <div class="fill"></div>
+            <div class="mask_left" id="mask_left"></div>
+            <div class="mask_right" id="mask_right"></div>
+            <div class="content">
+              <span>30%</span>
+              <span>14時間21分</span>
+            </div>
+
+          </div>
+        </div>
+      </div><!--左固定エリア-->
+      <div id="rightarea">
+        <div class="rightarea_top">
+          <h2>プロジェクト一覧</h2>
+          <div class="show_on_check" id="show_on_check" style="display: none;">
+            <div class="content_list">
+              <div class="selecter_in_list">
+                <div class="show_on_check_checkbox">
+                  <input type="checkbox" id="select-all-checkbox">
+                  <label for="select-all-checkbox"></label>
+                </div>
+              </div>
+              <div class="content_list_main">
+                <div class="btn_list">
+                  <button id="download-btn">
+                    <i class="fas fa-download"></i>
+                    ダウンロード
+                  </button>
+                  <button id="delete-btn">
+                    <i class="fas fa-trash"></i>
+                    削除
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <% for(var i=0; i < 0; i++) { %>
+          <div class="rightarea_content">
+            <div class="content_list">
+              <div class="selecter_in_list">
+                <div class="checkbox-container">
+                  <input type="checkbox" id="myCheckbox">
+                  <label for="myCheckbox"></label>
+                </div>
+              </div>
+              <div class="content_list_main">
+                <div class="content_list_main_filename">
+
+                </div>
+                <div class="content_list_main_detaile">
+
+                </div>
+              </div>
+              <div class="content_list_menu">
+  
+              </div>
+            </div>
+          </div>
+        <% } %>
+        <div id="user-files">
+          <!--ファイルリストを羅列-->
+        </div>
+      </div><!--右エリア-->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
+    <script src="./items/popup.js"></script>
+    <script src="./items/config.js"></script>
+    <script src="./items/scroll.js"></script>
+    <script src="./items/loading.js"></script>
+    
+    
+
+    <script>
+      const fill = document.querySelector('.fill');
+      const content = document.querySelector('.content span');
+
+
+      function setProgress(percent) {
+        if (0 <= percent && percent < 50) {
+          console.log(percent);
+          document.getElementById("mask_right").style.backgroundColor ="";
+          document.getElementById("mask_left").style.backgroundColor ="#2d3133";
+        }else if(50 <= percent && percent <= 100){
+          console.log('Nakadashi');
+          document.getElementById("mask_right").style.backgroundColor ="white";
+          document.getElementById("mask_left").style.backgroundColor ="";
+        }
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+        fill.style.transform = `rotate(${percent / 100 * 360}deg)`;
+        content.textContent = `${percent}%`;
+      }
+
+      setProgress(40);
+    </script>
+    <script>
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // Get user data from Firebase Authentication
+          console.log(user);
+          // Get user photo and name
+          const userPhoto = user.photoURL;
+          const userName = user.displayName;
+
+          // Display user photo and name
+          document.getElementById("user-photo").src = userPhoto;
+          document.getElementById("user-photo-header").src = userPhoto;
+          document.getElementById("user-name").textContent = userName;
+
+          const db = firebase.firestore();
+          const collectionRef = db.collection("users").doc(user.uid).collection("FileName");
+
+          //ファイル名とチェックボックスの表示
+          collectionRef.onSnapshot((querySnapshot) => {
+          const userFilesDiv = document.getElementById('user-files');
+          userFilesDiv.innerHTML = '';
+          var number = 0;
+
+          querySnapshot.forEach((doc) => {
+            number++;
+            const fileName = doc.data().fileName;
+            const fileId = doc.id;
+            const fileDiv = document.createElement('div');
+            fileDiv.className = 'file';
+            fileDiv.id = fileId;
+            fileDiv.innerHTML = `
+              <div class="rightarea_content" id="rightarea_content${number}">
+                <div class="content_list">
+                  <div class="selecter_in_list">
+                    <input type="checkbox" id="${number}" value="${fileId}" class="checkbox_in_list">
+                    <label for="${number}"></label>
+                  </div>
+                  <div class="content_list_main">
+                    <a href="#note" data-noteid="${fileId}" class="main_link"></a>
+                    <div class="content_list_main_filename">
+                      <div class=filename id=filename contenteditable="false">
+                        ${fileName}
+                      </div>
+                      <div class="content_list_menu">
+                        <button class="edit-button">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-button_in_menu">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="content_list_main_detaile">
+                      <div class="uploaded-time">
+                        <i class="far fa-clock"></i>2023-02-23 12:34:56
+                      </div>
+                      <div class="playback-time">
+                        <i class="far fa-play-circle"></i>00:00:00
+                      </div>
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+              </div>
+            `;
+            userFilesDiv.appendChild(fileDiv);
+          });
+
+          const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+          checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', (event) => {
+              const checkedCheckboxes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+              const checkedCheckboxesID = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id);
+              console.log(`Selected files: ${checkedCheckboxes.join(', ')}`);
+              console.log(event.target.id);
+              const parentElement = document.getElementById("rightarea_content"+event.target.id);
+              try{
+                if (event.target.checked) {
+                  parentElement.style.backgroundColor = '#f1f1f3';
+                } else {
+                  parentElement.style.backgroundColor = '';
+                }
+              }catch(e){
+                console.log(e.message);
+              }
+            });
+          });
+
+
+          
+
+
+
+          // Get references to the "Select All" checkbox and other checkboxes
+          const selectAllCheckbox = document.getElementById('select-all-checkbox');
+          const otherCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(#select-all-checkbox)');
+
+          // Add a change event listener to the "check all" checkbox
+          selectAllCheckbox.addEventListener("change", function() {
+            // If the "check all" checkbox is checked, check all other checkboxes
+            if (selectAllCheckbox.checked) {
+              otherCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+                const parentElement = document.getElementById("rightarea_content"+checkbox.id);
+                parentElement.style.backgroundColor = '#f1f1f3';
+              });
+              
+            }
+            // If the "check all" checkbox is not checked, uncheck all other checkboxes
+            else {
+              otherCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+                const parentElement = document.getElementById("rightarea_content"+checkbox.id);
+                parentElement.style.backgroundColor = '';
+              });
+            }
+          });
+
+
+
+
+          
+          const links = document.getElementsByTagName('a');
+          for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', function(event) {
+              event.preventDefault(); // Prevents the default behavior of the link
+              const noteId = this.getAttribute('data-noteid');
+              window.location.href = "./note?id=" + noteId; // Navigate to the note using the #id syntax
+            });
+          }
+
+
+
+
+
+
+          
+          //削除、ダウンロードボタンの表示
+          // Add an event listener to each checkbox
+          checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', function() {
+              // Get the div associated with the checkbox
+              const associatedDiv = document.getElementById(`show_on_check`);
+              const checkedCheckboxesID = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id);
+              if (checkbox.checked || checkedCheckboxesID.length>0) {
+                // Show the div if the checkbox is checked
+                associatedDiv.style.display = 'block';
+              } else {
+                // Hide the div if the checkbox is unchecked
+                associatedDiv.style.display = 'none';
+              }
+            });
+          });
+          
+
+          //名前の変更
+          const editButtons = document.querySelectorAll('.edit-button');
+          const filenames = document.querySelectorAll('.filename');
+
+          editButtons.forEach((button, index) => {
+            button.addEventListener('click', (event) => {
+              event.preventDefault();
+              const filename = filenames[index];
+              filename.contentEditable = true;
+              filename.style.position = 'relative';
+              filename.style.zIndex = 1;
+              filename.focus();
+              const originalFileName = filename.dataset.fileName;
+              filename.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  filename.contentEditable = false;
+                  filename.style.position = '';
+                  filename.style.zIndex = '';
+                  const newFileName = filename.textContent.trim();
+                  if (newFileName !== originalFileName) {
+                    filename.textContent = newFileName;
+                    filename.dataset.fileName = newFileName;
+                    // You can save the new file name to a database or perform other actions here
+                  }
+                } else if (event.key === 'Escape') {
+                  filename.textContent = originalFileName;
+                  filename.dataset.fileName = originalFileName;
+                  filename.contentEditable = false;
+                  filename.style.position = '';
+                  filename.style.zIndex = '';
+                }
+              });
+            });
+          });
+
+          document.addEventListener('click', (event) => {
+            if (!event.target.classList.contains('edit-button') && !event.target.classList.contains('filename')) {
+              filenames.forEach((filename) => {
+                if (filename.contentEditable === true) {
+                  const originalFileName = filename.dataset.fileName;
+                  const newFileName = filename.textContent.trim();
+                  if (newFileName !== originalFileName) {
+                    filename.textContent = newFileName;
+                    filename.dataset.fileName = newFileName;
+                    // You can save the new file name to a database or perform other actions here
+                  }
+                }
+                filename.contentEditable = false;
+                filename.style.position = '';
+                filename.style.zIndex = '';
+              });
+            }
+          });
+
+
+
+          
+
+
+
+          // Add event listeners for download and delete buttons
+          const downloadBtn = document.getElementById('download-btn');
+          const deleteBtn = document.getElementById('delete-btn');
+
+          downloadBtn.addEventListener('click', () => {
+            const selectedFiles = getSelectedFiles();
+            selectedFiles.forEach((fileId) => {
+              // Handle file download for selected file ID
+              // You can use Firebase Storage to download the file
+            });
+          });
+
+          deleteBtn.addEventListener('click', () => {
+            const selectedFiles = getSelectedFiles();
+            selectedFiles.forEach((fileId) => {
+              // Handle file deletion for selected file ID
+              filesCollection.doc(fileId).delete();
+            });
+          });
+        });
+
+            /*
+            var datalist = document.getElementById("datalist");
+            var output = '<div>';
+            for (var i = 0; i < fileNames.length; i++) {
+                output += '<div class="rightarea_content">';
+                output +='<h1>'+fileNames[i]+'</h1>';
+                output +='</div>';
+              }
+              output +'</div>';
+              datalist.innerHTML = output;
+              */
+          }
+        });
+
+     
+
+
+      const recordButton = document.querySelector('#recordButton');
+      let recording = false;
+      let audioStream;
+
+      recordButton.addEventListener('click', () => {
+        if (!recording) {
+          // Start recording
+          recording = true;
+          recordButton.classList.add("recording");
+          recordButton.innerHTML = '<i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>レコーディング中';
+          navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            audioStream = stream;
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const mediaRecorder = new MediaRecorder(stream);
+            const chunks = [];
+            mediaRecorder.start();
+
+            mediaRecorder.addEventListener('dataavailable', event => {
+              chunks.push(event.data);
+            });
+
+            mediaRecorder.addEventListener('stop', () => {
+              const audioBlob = new Blob(chunks, { type: 'audio/mp3' });
+              const userId = firebase.auth().currentUser.uid;
+              const date = new Date();
+              const hours = date.getHours();
+              const minutes = date.getMinutes();
+              const month = date.getMonth();
+              const dayOfYear = date.getDate();
+              const year = date.getFullYear();
+
+              const fileName = `${userId}/${year}年${month}月${dayOfYear}日${hours}時${minutes}分.mp3`;
+              const audioRef = firebase.storage().ref().child(fileName);
+              audioRef.put(audioBlob).then(snapshot => {
+                console.log('Audio file uploaded');
+              });
+
+              // Get a reference to the Firestore database
+              const db = firebase.firestore();
+
+              // Get the current date and time
+              const now = new Date();
+              const saveName = `${year}年${month}月${dayOfYear}日${hours}時${minutes}分.mp3`;
+
+              const docRef = db.collection("users").doc(userId).collection("FileName");
+              docRef.add({
+                fileName: saveName,
+                uploadedAt: firebase.firestore.Timestamp.fromDate(now)
+              });
+              console.log("Recording information stored in Firestore successfully");
+            });
+
+            setTimeout(() => {
+              mediaRecorder.stop();
+              audioStream.getTracks().forEach(track => track.stop());
+            }, 1000*60*60*5);
+          });
+        } else {
+          // Stop recording
+          recording = false;
+          recordButton.classList.remove("recording");
+          recordButton.innerHTML = '<i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>レコーディング';
+          audioStream.getTracks().forEach(track => track.stop());
+        }
+      });
+
+
+      // Get references to the file drop area and file input
+      const fileDropArea = document.getElementById("fileDropArea");
+      const fileInput = document.getElementById("fileInput");
+
+      
+      // Listen for file drop events on the file drop area
+      fileDropArea.addEventListener("drop", handleFileDrop);
+      fileDropArea.addEventListener("dragover", handleFileDragOver);
+
+      // Listen for change events on the file input
+      fileInput.addEventListener("change", handleFileInputChange);
+
+      // Get reference to the upload button
+      const uploadButton = document.getElementById("uploadButton");
+
+      // Listen for click events on the upload button
+      uploadButton.addEventListener("click", handleUploadButtonClick);
+
+      // Handle file drop events
+      function handleFileDrop(e) {
+        e.preventDefault();
+
+        // Get the first file that was dropped
+        const file = e.dataTransfer.files[0];
+        const text = document.getElementById("file_message");
+        document.getElementById("file_message").textContent = file.name;
+        console.log(file.name);
+
+        // Trigger the change event on the file input
+        fileInput.files = e.dataTransfer.files;
+      }
+
+      // Handle file drag over events
+      function handleFileDragOver(e) {
+        e.preventDefault();
+        const text = document.getElementById("file_message");
+        document.getElementById("file_message").textContent = file.name;
+      }
+
+      // Handle file input change events
+      function handleFileInputChange(e) {
+        // Get the first file that was selected
+        const file = e.target.files[0];
+        const text = document.getElementById("file_message");
+        document.getElementById("file_message").textContent = file.name;
+      }
+      
+
+      // Handle upload button click events
+      function handleUploadButtonClick() {
+        // Get the file to upload
+        const file = fileInput.files[0];
+
+        // Get the current user's ID
+        const userId = firebase.auth().currentUser.uid;
+        
+        // Generate a unique file name for the uploaded file
+        const fileName = `${userId}/${file.name}`;
+
+        // Get a reference to the Firebase Storage location where the file will be uploaded
+        const storageRef = firebase.storage().ref(fileName);
+
+        // Upload the file
+        const task = storageRef.put(file);
+        
+        // Monitor the upload progress
+        task.on("state_changed", function(snapshot) {
+          // Update the upload progress
+        }, function(error) {
+          // Handle any errors
+        }, function() {
+          // Upload complete, retrieve the URL for the uploaded file
+          task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            // Store the URL in the database
+            console.log("upload the file success.");
+            // Get the current date and time
+            var uploadTime = new Date();
+
+            // Get the user ID from Firebase
+            var userId = firebase.auth().currentUser.uid;
+            // Store the file name and playback time in variables
+            var fileName = file.name;
+
+            const storage = firebase.storage();
+            const fileRef = storage.ref(`${userId}/${fileName}`);
+            
+            storageRef.getDownloadURL().then(function(url) {
+              // Create an HTML audio element to play the file
+              var audio = new Audio(url);
+              
+              // Wait for the audio to load the metadata
+              audio.addEventListener("loadedmetadata", function() {
+                // Get the playback time of the audio
+                var playbackTime = audio.duration;
+
+                // Do something with the playback time
+                console.log("Playback time:", playbackTime);
+                // Create a reference to the Firestore database
+                var db = firebase.firestore();
+                var userRef = db.collection("users").doc(userId).collection("FileName");
+
+                // Add the file name, upload time, and playback time to the Firestore database
+                userRef.add({
+                  fileName: fileName,
+                  uploadTime: uploadTime,
+                  playbackTime: playbackTime
+                })
+                .then(function() {
+                  console.log("Data added successfully to Firestore database");
+                })
+                .catch(function(error) {
+                  console.error("Error writing document: ", error);
+                });
+              });
+            }).catch(function(error) {
+              // Handle any errors that occur while retrieving the file
+              console.error(error);
+            });
+          });
+        });
+      }
+
+    </script>
+  </body>
+</html>

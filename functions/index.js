@@ -10,14 +10,17 @@ app.get('/', (req, res) => {
     res.render('top.ejs');
 });
 
-app.get('/mypage', (req, res) => {
-    res.render('mypage.ejs');
+app.get('/note', (req, res) => {
+    res.render('note.ejs');
 });
 
 app.get('/signin', (req, res) => {
     res.render('signin.ejs');
 });
 
+app.get('/home', (req, res) => {
+  res.render('home.ejs');
+});
 
 
 //exports.app = functions.https.onRequest(app);

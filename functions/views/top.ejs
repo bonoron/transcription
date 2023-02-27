@@ -255,8 +255,8 @@
         </footer>
     </div>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="./popup.js"></script>
-    <script src="./config.js"></script>
+    <script src="./items/popup.js"></script>
+    <script src="./items/config.js"></script>
     <script>
         const firestore = firebase.firestore();
         // Google Auth
@@ -280,7 +280,7 @@
                 .catch((error) => {
                 console.error("Error storing user data in Firestore", error);
                 });
-                window.location.replace("./mypage");
+                window.location.replace("./note");
 
         }).catch(error => {
                 const signinError = `
