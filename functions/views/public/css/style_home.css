@@ -51,7 +51,7 @@
   /* top ================================ */
 
   header {
-    height: 8vh;
+    height: 60px;
     width: 100%;
     top: 0;
     left: 0;
@@ -76,35 +76,35 @@
   }
 
   .head_left {
-    width: 30%;
-    height: 100%;
-    
+    width: 100%;
+    height: 60px;
+   
     overflow: hidden;
     /*縦中央揃え*/
     top: 0;
     bottom: 0;
     margin: auto;
-    
+    padding: 7px 9%;
   }
 
   .head_left h2{
-    font-size: 3.5vh;
+    font-size: 28px;
     background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
     background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    padding-left: 4%;
+    
   }
 
   .head_right {
-    width: 70%;
+    width: 100%;
     height: 100%;
-    
+    padding: 8px 6% 0 0;
     text-align: right;
     top: 0;
     bottom: 0;
     margin: auto;
-    padding: 8px 5% 0 0;
+    
   }
 
   .modelArea {
@@ -313,7 +313,7 @@
         top:0;
         /*横半分50%　縦を100vhにする*/
         width: 21%;
-        height: 92vh;
+        height: 100vh;
         background-color: #f1f1f3;
         overflow-y: scroll;
         background-color: #2d3133;
@@ -330,22 +330,26 @@
         top:0;
         /*横半分50%　縦を100vhにする*/
         width: 79%;
-        height: 92vh;
+        height: 100vh;
         overflow-y: scroll;
         scrollbar-width: 20px;
-        padding: 2% 5%;
+        
         color: #2d3133;
+    }
+
+    .rightarea_main {
+      padding: 2% 5%;
     }
 
     #user-profile {
         display: flex;
         align-items: center;
-        margin-top: 20px;
-        padding: 7px 9%;
+        margin-top: 15px;
+        padding: 0px 9% 7px 9%;
       }
 
       #user-profile:hover {
-        background-color: white;
+        background-color: #f1f1f3;
         cursor: pointer;
         color: #2d3133;
       }
@@ -420,6 +424,7 @@
         width: 100%;
         position: relative;
         display: flex;
+        margin-left: 15px;
     }
 
     .content_list_menu {

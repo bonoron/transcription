@@ -26,43 +26,12 @@
         <span>Loading</span>
       </div>
     </div>
-    <header>
-      <div class="container">
-        <div class="head_container">
-          <div class="head_left">
-            <h2>Transcription</h2>
-          </div>
-          <div class="head_right">
-            <div class="head_right_contents">
-              <button id="openModel" class="openModel"><i class="fa-solid fa-cloud-arrow-up" style="margin-right: 10px;"></i>アップロード</button>
-              <section id="modelArea" class="modelArea">
-                  <div id="modelBg" class="modelBg"></div>
-                  <div class="modelWrapper">
-                    <h1 style="text-align: center;">音声・動画のアップロード</h1>
-                    <div id="fileDropArea" class="fileDropArea">
-                      <h2>Drag and drop</h2>
-                      <i class="fa-solid fa-cloud-arrow-up" style="font-size: 10vh;"></i><br>
-                      <p></p>
-                      <label class="file_deco"><input type="file" id="fileInput">ファイルを選択</label>
-                      <p class="file_message" id="file_message">選択されていません</p>
-                    </div>
-                    <div id="closeModel" class="closeModel" style="font-size: 40px;">
-                    ×
-                    </div>
-                    <button id="uploadButton">Upload</button>
-                  </div>
-              </section>
-              <button id="recordButton"><i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>レコーディング</button>
-              <div id="user-profile-header">
-                <img id="user-photo-header" src="" alt="User photo" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
+    
     <div id="wrapper">
       <div id="fixed-area">
+        <div class="head_left">
+          <h2>Transcription</h2>
+        </div>
         <div id="user-profile">
           <img id="user-photo" src="" alt="User photo" />
           <p id="user-name" style="font-weight: 550; font-size: 13.5px;"></p>
@@ -90,59 +59,93 @@
         </div>
       </div><!--左固定エリア-->
       <div id="rightarea">
-        <div class="rightarea_top">
-          <h2>プロジェクト一覧</h2>
-          <div class="show_on_check" id="show_on_check" style="display: none;">
-            <div class="content_list">
-              <div class="selecter_in_list">
-                <div class="show_on_check_checkbox">
-                  <input type="checkbox" id="select-all-checkbox">
-                  <label for="select-all-checkbox"></label>
-                </div>
-              </div>
-              <div class="content_list_main">
-                <div class="btn_list">
-                  <button id="download-btn">
-                    <i class="fas fa-download"></i>
-                    ダウンロード
-                  </button>
-                  <button id="delete-btn">
-                    <i class="fas fa-trash"></i>
-                    削除
-                  </button>
+        <header>
+          <div class="container">
+            <div class="head_container">
+              
+              <div class="head_right">
+                <button id="openModel" class="openModel"><i class="fa-solid fa-cloud-arrow-up" style="margin-right: 10px;"></i>アップロード</button>
+                <section id="modelArea" class="modelArea">
+                    <div id="modelBg" class="modelBg"></div>
+                    <div class="modelWrapper">
+                      <h1 style="text-align: center;">音声・動画のアップロード</h1>
+                      <div id="fileDropArea" class="fileDropArea">
+                        <h2>Drag and drop</h2>
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 10vh;"></i><br>
+                        <p></p>
+                        <label class="file_deco"><input type="file" id="fileInput">ファイルを選択</label>
+                        <p class="file_message" id="file_message">選択されていません</p>
+                      </div>
+                      <div id="closeModel" class="closeModel" style="font-size: 40px;">
+                      ×
+                      </div>
+                      <button id="uploadButton">Upload</button>
+                    </div>
+                </section>
+                <button id="recordButton"><i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>レコーディング</button>
+                <div id="user-profile-header">
+                  <img id="user-photo-header" src="" alt="User photo" />
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        
-        <% for(var i=0; i < 0; i++) { %>
-          <div class="rightarea_content">
-            <div class="content_list">
-              <div class="selecter_in_list">
-                <div class="checkbox-container">
-                  <input type="checkbox" id="myCheckbox">
-                  <label for="myCheckbox"></label>
+        </header>
+        <div class="rightarea_main">
+          <div class="rightarea_top">
+            <h2>プロジェクト一覧</h2>
+            <div class="show_on_check" id="show_on_check" style="display: none;">
+              <div class="content_list">
+                <div class="selecter_in_list">
+                  <div class="show_on_check_checkbox">
+                    <input type="checkbox" id="select-all-checkbox">
+                    <label for="select-all-checkbox"></label>
+                  </div>
+                </div>
+                <div class="content_list_main">
+                  <div class="btn_list">
+                    <button id="download-btn">
+                      <i class="fas fa-download"></i>
+                      ダウンロード
+                    </button>
+                    <button id="delete-btn">
+                      <i class="fas fa-trash"></i>
+                      削除
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div class="content_list_main">
-                <div class="content_list_main_filename">
-
+            </div>
+          </div>
+          
+          
+          <% for(var i=0; i < 0; i++) { %>
+            <div class="rightarea_content">
+              <div class="content_list">
+                <div class="selecter_in_list">
+                  <div class="checkbox-container">
+                    <input type="checkbox" id="myCheckbox">
+                    <label for="myCheckbox"></label>
+                  </div>
                 </div>
-                <div class="content_list_main_detaile">
-
-                </div>
-              </div>
-              <div class="content_list_menu">
+                <div class="content_list_main">
+                  <div class="content_list_main_filename">
   
+                  </div>
+                  <div class="content_list_main_detaile">
+  
+                  </div>
+                </div>
+                <div class="content_list_menu">
+    
+                </div>
               </div>
             </div>
+          <% } %>
+          <div id="user-files">
+            <!--ファイルリストを羅列-->
           </div>
-        <% } %>
-        <div id="user-files">
-          <!--ファイルリストを羅列-->
         </div>
+        
       </div><!--右エリア-->
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
