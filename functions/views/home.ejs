@@ -29,11 +29,11 @@
     
     <div id="wrapper">
       <div id="fixed-area">
-        <div class="head_left">
+        <div class="head_name">
           <h2>Transcription</h2>
         </div>
         <div id="user-profile">
-          <img id="user-photo" src="" alt="User photo" />
+          <img id="user-photo" src="" alt="User photo"  onerror="replaceWithIcon()"/>
           <p id="user-name" style="font-weight: 550; font-size: 13.5px;"></p>
         </div>
         <div class="selection_leftarea">
@@ -62,6 +62,9 @@
         <header>
           <div class="container">
             <div class="head_container">
+              <div class="head_left">
+
+              </div>
               
               <div class="head_right">
                 <button id="openModel" class="openModel"><i class="fa-solid fa-cloud-arrow-up" style="margin-right: 10px;"></i>アップロード</button>
@@ -84,7 +87,7 @@
                 </section>
                 <button id="recordButton"><i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>レコーディング</button>
                 <div id="user-profile-header">
-                  <img id="user-photo-header" src="" alt="User photo" />
+                  <img id="user-photo-header" src="" alt="User photo" onerror="replaceWithIconHeader()"/>
                 </div>
               </div>
             </div>
@@ -276,6 +279,7 @@
 
 
           // Get references to the "Select All" checkbox and other checkboxes
+          // 全部のチェックボックスを取得する
           const selectAllCheckbox = document.getElementById('select-all-checkbox');
           const otherCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(#select-all-checkbox)');
 
@@ -300,10 +304,7 @@
             }
           });
 
-
-
-
-          
+          // ページ遷移（IDをつけて、遷移先のページに情報を渡す）
           const links = document.getElementsByTagName('a');
           for (let i = 0; i < links.length; i++) {
             links[i].addEventListener('click', function(event) {
@@ -312,11 +313,6 @@
               window.location.href = "./note?id=" + noteId; // Navigate to the note using the #id syntax
             });
           }
-
-
-
-
-
 
           
           //削除、ダウンロードボタンの表示
@@ -433,7 +429,50 @@
           }
         });
 
-     
+        function replaceWithIcon() {
+          document.getElementById("user-photo").style.display = "none"; // hide the image
+          
+          // create a new element with the circle shape
+          var circle = document.createElement("div");
+          circle.classList.add("circle_photo");
+
+          // create a new element with the icon
+          var icon = document.createElement("i");
+          icon.classList.add("user-icon"); // add the CSS class for the icon
+          icon.title = "User Icon"; // optional: add a title for the icon
+          icon.innerHTML = '<i class="fa-solid fa-user"></i>'; // add the Awesome font icon HTML code
+
+          // insert the icon element inside the circle element
+          circle.appendChild(icon);
+
+          // insert the circle element before the original image
+          var parent = document.getElementById("user-photo").parentNode;
+          parent.insertBefore(circle, document.getElementById("user-photo"));
+        }
+
+        function replaceWithIconHeader() {
+          document.getElementById("user-photo-header").style.display = "none"; // hide the optional header image
+
+          // create a new element with the circle shape
+          var circle = document.createElement("div");
+          circle.classList.add("circle_photo_header");
+
+          // create a new element with the icon
+          var icon = document.createElement("i");
+          icon.classList.add("user-icon"); // add the CSS class for the icon
+          icon.title = "User Icon"; // optional: add a title for the icon
+          icon.innerHTML = '<i class="fa-solid fa-user"></i>'; // add the Awesome font icon HTML code
+
+          // insert the icon element inside the circle element
+          circle.appendChild(icon);
+
+          // insert the circle element before the original image
+          var parent = document.getElementById("user-photo-header").parentNode;
+          parent.insertBefore(circle, document.getElementById("user-photo-header"));
+        }
+
+
+
 
 
       const recordButton = document.querySelector('#recordButton');

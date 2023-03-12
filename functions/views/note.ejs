@@ -14,47 +14,141 @@
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
   </head>
   <body>
-    <div id="wrapper">
-        <div id="fixed-area" class="fixed_area">
-            <div class="top_content">
-                <h2>Transcription</h2>
-                <a class="content" href="#"><i class="fa-solid fa-gear"></i>設定</a>
-                <a class="content" href="#"><i class="fa-solid fa-gear"></i>設定</a>
+    <div class="overlay">
+      <!-- add any necessary content here -->
+      <div id="wrapper">
+        <div id="fixed-area">
+          <div class="fixed-area-name">
+            <h2 style="text-align: center;">Transcription</h2>
+          </div>
+          <div class="fixed-area-contents">
+            <div id="user-profile-in-fixed">
+              <img id="user-photo-in-fixed" src="" alt="User photo"  onerror="replaceWithIcon()"/>
+              <p id="user-name-in-fixed" style="font-weight: 550; font-size: 13.5px;"></p>
             </div>
-            <div class="bottom_content">
-                <ul>
-                  <div id="fileContainer"></div>
-                </ul>
-            </div>
-            <button id="openModel" class="openModel">Log in</button>
-            <section id="modelArea" class="modelArea">
-                <div id="modelBg" class="modelBg"></div>
-                <div class="modelWrapper">
-                  <h1 style="text-align: center;">音声・動画のアップロード</h1>
-                  <div id="fileDropArea" class="fileDropArea">
-                    <h2>Drag and drop</h2>
-                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 40px;"></i><br>
-                    <p></p>
-                    <label class="file_deco"><input type="file" id="fileInput">ファイルを選択</label>
-                    <p class="file_message" id="file_message">選択されていません</p>
-                  </div>
-                  <div id="closeModel" class="closeModel" style="font-size: 20px;">
-                  ×
-                  </div>
-                  <button id="uploadButton">Upload</button>
+            <div class="line"></div>
+            <div class="fixed-area-content">
+              <a class="fixed-area-content-link" href="#">
+                <div class="fixed-area-content-icon">
+                  <i class="fas fa-home"></i>
                 </div>
-            </section>
-              
-        </div><!--左固定エリア-->
+                <div class="fixed-area-content-text">
+                  <p>ホーム</p>
+                </div>
+              </a>
+            </div>
+            <div class="fixed-area-content">
+              <a class="fixed-area-content-link" href="#">
+                <div class="fixed-area-content-icon">
+                  <i class="fas fa-download"></i>
+                </div>
+                <div class="fixed-area-content-text">
+                  <p>ダウンロード</p>
+                </div>
+              </a>
+            </div>
+            <div class="fixed-area-content">
+              <a class="fixed-area-content-link" href="#">
+                <div class="fixed-area-content-icon">
+                  <i class="fas fa-trash-alt"></i>
+                </div>
+                <div class="fixed-area-content-text">
+                  <p>削除</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div id="rightarea">
+          
+        </div>
+      </div>
+    </div>
+
+
+    <header>
+      <div class="container">
+        <div class="head_container">
+          <div class="head_left">
+            <h2>Transcription</h2>
+          </div>
+          
+          <div class="head_right">
+            
+          </div>
+        </div>
+      </div>
+    </header>
+    <div id="wrapper">
+        <!--左固定エリア-->
+        <div class="sidebar">
+          
+          <div class="sidebar_icons">
+            <!-- sidebar content goes here -->
+            <button class="toggle-sidebar">
+              <span class="open-icon">&#9776;</span>
+              <span class="close-icon">&times;</span>
+            </button>
+            
+            <div id="user-profile">
+              <img id="user-photo" src="" alt=""  onerror="replaceWithIcon()"/>
+            </div>
+            <ul>
+              <li class="sidebar_content">
+                <i class="fas fa-home"></i>
+                <p>ホーム</p>
+                <div class="comment">ホームへ戻る</div>
+              </li>
+              <li class="sidebar_content">
+                <i class="fas fa-download"></i>
+                <p>ダウン…</p>
+                <div class="comment">ダウンロード</div>
+              </li>
+              <li class="sidebar_content">
+                <i class="fas fa-trash-alt"></i>
+                <p>削除</p>
+                <div class="comment-two">削除</div>
+              </li>
+            </ul>
+          </div>
+          <div class="sidebar_icons_2">
+            <ul>
+              <li class="sidebar_content">
+                <i class="fa-solid fa-pen"></i>
+                <p>保存</p>
+                <div class="comment-five">変更を保存</div>
+              </li>
+              <li class="sidebar_content">
+                <i class="fas fa-download"></i>
+                <p>ダウン…</p>
+                <div class="comment">ダウンロード</div>
+              </li>
+              <li class="sidebar_content">
+                <i class="fas fa-trash-alt"></i>
+                <p>削除</p>
+                <div class="comment-two">削除</div>
+              </li>
+            </ul>
+          </div>
+          
+        </div>
 
         <!--右エリア-->
-        <div id="container">
+        <div id="right_container" class="right_container">
           <div class="head_main">
             <div class="head_title">
               <h1>開発中</h1>
+              <div class="content_list_main_detaile">
+                <div class="uploaded-time">
+                  <i class="far fa-clock"></i>2023-02-23 12:34:56
+                </div>
+                <div class="playback-time">
+                  <i class="far fa-play-circle"></i>00:00:00
+                </div>
+              </div>
             </div>
             <div class="select_name">
-              <h3 style="padding-bottom: 10px;">話者名の変更</h3>
+              <h4 style="padding-bottom: 5px;">話者名の変更</h4>
               <label class="oldName">変更前：
                 <select id="oldName">
                   <option hidden>選択してください</option>
@@ -68,10 +162,45 @@
                 <h4>話者：</h4>
                 <p id="name_tag"></p>
               </div>
+              <div class="keyword_container">
+                <h4>頻出単語：</h4>
+                <p id="key_word"></p>
+              </div>
             </div>
           </div>
+          <div id="text-area">
+            
+          </div>
           <div id="dataContainer" class="dataContainer"></div>
-          <button id="saveButton" class="saveButton" onclick="saveData()"><i class="fa-solid fa-pen" style="margin-right: 5px;"></i>Save</button>
+          <button id="saveButton" class="saveButton" onclick="saveData()"><i class="fa-solid fa-pen" style="margin-right: 4px;"></i><p style="display: inline-block;" id="savetext">保存</p></button>
+        </div>
+
+        <audio id="myAudio" src="./public/images/yM1MgjtGkD0.wav"></audio>
+        <div class="audio-player">
+          <div class="progress-bar">
+            <div class="progress"></div>
+          </div>
+          <div class="timedisplay">
+            <span id="current-time" style="float: left;">0:00</span>
+            <span id="duration" style="float: right;">0:00</span>
+          </div>
+          <div class="audio-control-main">
+            <div class="skiptime-controls">
+              <label for="skip-time" style="padding-top: 3px;"><i class="fa-solid fa-rotate-right" style="margin: 0 5px 0 32px;"></i>スキップ:</label>
+              <input type="range" id="skip-time" name="skip-time" min="1" max="10" value="5" step="1">
+              <div id="skip-time-display" style="padding-top: 3px;">5秒</div>
+            </div>
+            <div class="controls">
+              <button id="backBtn"><i class="fa-solid fa-backward"></i></button>
+              <button id="playBtn"><i class="fa fa-play"></i></button>
+              <button id="pauseBtn" style="display: none"><i class="fa fa-pause"></i></button>
+              <button id="skipBtn"><i class="fa fa-forward"></i></button>
+            </div>
+            <div class="speed-controls">
+              <label for="speed" style="padding-top: 2px;"><i class="fa-regular fa-circle-play" style="margin-right: 5px; padding-top: 2px;"></i>再生速度:</label>
+              <input type="range" id="speed" min="0.5" max="3" step="0.1" value="1" title="x1"><p id="speed-value" style="padding-top: 2px;">x1</p>
+            </div>
+          </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -79,6 +208,287 @@
     <script src="./items/popup.js"></script>
     <script src="./items/file_name.js"></script>
     <script src="./items/scroll.js"></script>
+    <script>
+      const audio = document.getElementById('myAudio');
+      const playBtn = document.getElementById('playBtn');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const skipBtn = document.getElementById('skipBtn');
+      const backBtn = document.getElementById('backBtn');
+      
+      const progressBar = document.querySelector('.progress');
+      const progressBarContainer = document.querySelector('.progress-bar');
+      const speed = document.getElementById('speed');
+      const speedValue = document.getElementById('speed-value');
+
+      const currentTime = document.getElementById("current-time");
+      const duration = document.getElementById("duration");
+      duration.textContent = formatTime(audio.duration);
+
+      
+
+      audio.addEventListener("timeupdate", () => {
+        currentTime.textContent = formatTime(audio.currentTime);
+      });
+
+      function formatTime(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60).toString().padStart(2, "0");
+        return `${minutes}:${seconds}`;
+      }
+
+      let isPlaying = false;
+
+      function togglePlay() {
+        if (isPlaying) {
+          audio.pause();
+          playBtn.style.display = 'block';
+          pauseBtn.style.display = 'none';
+        } else {
+          audio.play();
+          playBtn.style.display = 'none';
+          pauseBtn.style.display = 'block';
+        }
+        isPlaying = !isPlaying;
+      }
+
+      
+      speed.addEventListener('input', function() {
+        audio.playbackRate = speed.value;
+        speed.setAttribute('title', 'x'+speed.value);
+        speedValue.textContent = 'x'+speed.value;
+      });
+
+      const skipTimeRange = document.getElementById("skip-time");
+      const skipTimeDisplay = document.getElementById("skip-time-display");
+
+      skipTimeRange.addEventListener("input", function() {
+        const skipTime = skipTimeRange.value;
+        skipTimeDisplay.innerText = `${skipTime}秒`;
+        // Update the skipping time here
+        
+      });
+
+      function skip() {
+        audio.currentTime += parseInt(skipTimeRange.value);
+      }
+
+      function back() {
+        audio.currentTime -= parseInt(skipTimeRange.value);
+      }
+
+      function updateProgressBar() {
+        const { currentTime, duration } = audio;
+        const progressPercent = (currentTime / duration) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+      }
+
+      function setProgressBar(e) {
+        const { clientWidth } = progressBarContainer;
+        const offsetX = e.offsetX;
+        const duration = audio.duration;
+        audio.currentTime = (offsetX / clientWidth) * duration;
+      }
+
+      playBtn.addEventListener('click', togglePlay);
+      pauseBtn.addEventListener('click', togglePlay);
+      skipBtn.addEventListener('click', skip);
+      backBtn.addEventListener('click', back);
+      
+      audio.addEventListener('timeupdate', updateProgressBar);
+      progressBarContainer.addEventListener('click', setProgressBar);
+    </script>
+    <script>
+      const saveButton = document.getElementById("saveButton");
+      const saveText = document.getElementById("savetext");
+      let prevScrollpos = window.pageYOffset;
+
+      window.onscroll = function() {
+        const currentScrollpos = window.pageYOffset;
+        if (prevScrollpos > currentScrollpos) {
+          // Scrolling up
+          saveButton.classList.remove("hide");
+          saveText.textContent = "保存";
+        } else {
+          // Scrolling down
+          saveButton.classList.add("hide");
+          saveText.textContent = "";
+        }
+        prevScrollpos = currentScrollpos;
+      }
+    </script>
+    <script>
+      //編集のためのコード（結果をどのように編集していくかを記している）
+      const textArea = document.getElementById('text-area');
+      const editableContainers = [];
+
+      function addEditableContainer(index) {
+        const editableContainer = document.createElement('div');
+        editableContainer.classList.add('editable-container');
+
+        const nonEditable = document.createElement('div');
+        nonEditable.classList.add('non-editable');
+        nonEditable.innerText = 'This is a non-editable div woven into an editable text area.';
+
+        const editable = document.createElement('div');
+        editable.classList.add('editable');
+        editable.contentEditable = true;
+
+        editableContainer.appendChild(nonEditable);
+        editableContainer.appendChild(editable);
+        if (index === -1) {
+          textArea.appendChild(editableContainer);
+          editableContainers.push(editableContainer);
+        } else {
+          textArea.insertBefore(editableContainer, editableContainers[index + 1]);
+          editableContainers.splice(index + 1, 0, editableContainer);
+        }
+
+        editable.addEventListener('keydown', (event) => {
+          if (event.keyCode === 13) {
+            event.preventDefault();
+            // Get the current text and the position of the caret
+            const text = editable.innerText;
+            const caretPos = getCaretPosition(editable);
+
+            // Split the text into two parts based on the caret position
+            const textBeforeCaret = text.substring(0, caretPos);
+            const textAfterCaret = text.substring(caretPos);
+
+            // Set the text of the current editable to the text before the caret
+            editable.innerText = textBeforeCaret;
+
+            // Create a new editable container and insert it after the current one
+            const index = editableContainers.indexOf(editableContainer);
+            const newEditableContainer = addEditableContainer(index + 1);
+
+            // Set the text of the new editable to the text after the caret
+            newEditableContainer.querySelector('.editable').innerText = textAfterCaret;
+
+            // Insert the new editable container after the current one, with a line break before and after
+            textArea.insertBefore(newEditableContainer, editableContainer.nextSibling);
+            editableContainers.splice(index + 1, 0, editableContainer);
+
+            // Set focus on the new editable
+            newEditableContainer.querySelector('.editable').focus();
+          } else if (event.keyCode === 38) {
+            event.preventDefault();
+            moveUp(editable);
+          } else if (event.keyCode === 40) {
+            event.preventDefault();
+            moveDown(editable);
+          } else if (event.keyCode === 8 && editable.innerText.trim() === '') {
+            event.preventDefault();
+            backContainer(editable);
+          } else if (event.keyCode === 46 && editable.innerText.trim() === '') {
+            event.preventDefault();
+            deleteContainer(editable);
+          }
+        });
+
+        function getCaretPosition(editable) {
+          let position = 0;
+          const selection = window.getSelection();
+          if (selection.rangeCount !== 0) {
+            const range = selection.getRangeAt(0);
+            const preCaretRange = range.cloneRange();
+            preCaretRange.selectNodeContents(editable);
+            preCaretRange.setEnd(range.endContainer, range.endOffset);
+            position = preCaretRange.toString().length;
+          }
+          return position;
+        }
+
+        function moveUp(editable) {
+          const index = editableContainers.indexOf(editable.parentNode);
+          if (index > 0) {
+            editable.blur();
+            editableContainers[index - 1].querySelector('.editable').focus();
+            console.log("up");
+          }
+        }
+
+        function moveDown(editable) {
+          const index = editableContainers.indexOf(editable.parentNode);
+          if (index < editableContainers.length - 1) {
+            editable.blur();
+            editableContainers[index + 1].querySelector('.editable').focus();
+            console.log("down");
+          }
+        }
+
+        function backContainer(editable) {
+          if (!editable) {
+            return;
+          }
+          const index = editableContainers.indexOf(editable.parentNode);
+          editableContainers[index].remove();
+          editableContainers.splice(index, 1);
+        }
+        function deleteContainer(editable) {
+          if (!editable) {
+            return;
+          }
+          const index = editableContainers.indexOf(editable.parentNode);
+          editableContainers[index].remove();
+          editableContainers.splice(index, 1);
+        }
+
+        return editableContainer;
+      }
+
+      addEditableContainer();
+    </script>
+    <script>
+      //サイドバーの開閉。ボタンクリックで開閉。
+      //それぞれのボタンを押したら、その機能に飛べるようにする
+      /*
+      const toggleSidebarButton = document.querySelector(".toggle-sidebar");
+      const openIcon = document.querySelector(".open-icon");
+      const closeIcon = document.querySelector(".close-icon");
+      const sidebar = document.querySelector(".sidebar");
+      const rightContainer = document.querySelector('.right_container');
+      
+      toggleSidebarButton.addEventListener("click", () => {
+        sidebar.classList.toggle("expanded");
+        
+        if (sidebar.classList.contains("expanded")) {
+          toggleSidebarButton.style.right = "-20px";
+          closeIcon.style.display = "block";
+          openIcon.style.display = "none";
+          rightContainer.classList.add('dim');
+
+          rightContainer.addEventListener("click", () => {
+            toggleSidebarButton.style.right = "-20px";
+            closeIcon.style.display = "none";
+            openIcon.style.display = "block";
+            rightContainer.classList.remove('dim');
+            sidebar.classList.remove("expanded");
+          });
+        } else {
+          toggleSidebarButton.style.right = "-20px";
+          closeIcon.style.display = "none";
+          openIcon.style.display = "block";
+          rightContainer.classList.remove('dim');
+        }
+      });
+      */
+      
+      const toggleSidebarButton = document.querySelector(".toggle-sidebar");
+      const rightContainer = document.getElementById('rightarea');
+
+      toggleSidebarButton.addEventListener("click", function() {
+        var overlay = document.querySelector(".overlay");
+        if (overlay.style.display === "none") {
+          overlay.style.display = "block";
+          rightContainer.addEventListener("click", () => {
+            overlay.style.display = "none";
+          });
+        } else {
+          overlay.style.display = "none";
+        }
+      });
+      
+    </script>
     <script>
       const dropArea = document.querySelector('.fileDropArea');
     
@@ -212,83 +622,118 @@
 
       // Function to update the Speaker name
       function updateSpeaker(oldName, newName) {
-        // Get the data from the global variable
-        var data = window.data;
-        // Loop through all the data to find instances of the old name
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].Speaker === oldName) {
-            // Update the Speaker name to the new name
-            data[i].Speaker = newName;
+        if (newName===''){
+          window.alert('名前を入力してから、更新を押してください。');
+        }else {
+          // Get the data from the global variable
+          var data = window.data;
+          // Loop through all the data to find instances of the old name
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].Speaker === oldName) {
+              // Update the Speaker name to the new name
+              data[i].Speaker = newName;
+            }
           }
-        }
-        // Save the updated data to the JSON file
-        var jsonRef = storage.ref("test.json");
-        jsonRef
-          .putString(JSON.stringify(data))
-          .then(function () {
-            console.log("File saved successfully!");
-            function removeChildren(x){
-                if (x.hasChildNodes()) {
-                  while (x.childNodes.length > 0) {
-                    x.removeChild(x.firstChild)
+          // Save the updated data to the JSON file
+          var jsonRef = storage.ref("test.json");
+          jsonRef
+            .putString(JSON.stringify(data))
+            .then(function () {
+              console.log("File saved successfully!");
+              function removeChildren(x){
+                  if (x.hasChildNodes()) {
+                    while (x.childNodes.length > 0) {
+                      x.removeChild(x.firstChild)
+                    }
                   }
                 }
-              }
-              removeChildren(document.getElementById("oldName"));
-              var select = document.getElementById("oldName");
-              // Create a set to store the unique names from the Speaker column
-              var speakerNames = new Set();
-              // Loop through the data and add each Speaker name to the set
-              data.forEach(function(record) {
-                speakerNames.add(record.Speaker);
-              });
+                removeChildren(document.getElementById("oldName"));
+                var select = document.getElementById("oldName");
+                // Create a set to store the unique names from the Speaker column
+                var speakerNames = new Set();
+                // Loop through the data and add each Speaker name to the set
+                data.forEach(function(record) {
+                  speakerNames.add(record.Speaker);
+                });
 
-              // Loop through the unique names and create an option for each one
-              speakerNames.forEach(function(name) {
-                var option = document.createElement("option");
-                option.value = name;
-                option.text = name;
-                select.add(option);
-              });
-            // Update the HTML to reflect the changes
-            //displayData();
-            data.sort(function(a, b) {
-                return a.Column1 - b.Column1;
-              });
+                // Loop through the unique names and create an option for each one
+                speakerNames.forEach(function(name) {
+                  var option = document.createElement("option");
+                  option.value = name;
+                  option.text = name;
+                  select.add(option);
+                });
+              // Update the HTML to reflect the changes
+              //displayData();
+              data.sort(function(a, b) {
+                  return a.Column1 - b.Column1;
+                });
 
-              // Display the sorted JSON data
-              var speakerNamesArray = Array.from(speakerNames);
-              var name_tag = document.getElementById("name_tag");
-              name_tag.innerHTML = speakerNamesArray;
-              
-              var dataContainer = document.getElementById("dataContainer");
-              var output = '<div class="table_main">';
-              for (var i = 0; i < data.length; i++) {
-                output += '<div class="table_sub">';
-                output += '<div class="table_sub_exp">';
-                output += '<ul>';
-                output += '<li><p class="circle" style="background-color: #'+palette[speakerNamesArray.indexOf(data[i].Speaker)]+';"></p></li>';                   
-                output += '<li><p class="speaker" id="speaker'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Speaker + '</p></li>';
-                output += '<li><p class="time">' + data[i].Start + '</p></li>';
-                output += '<li><p class="time">' + data[i].End + '</p></li>';
-                output += '</ul>';
-                output += '</div><br>';
-                output += '<div class="editable-cell" id="'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Text + '</div>';
+                // Display the sorted JSON data
+                var speakerNamesArray = Array.from(speakerNames);
+                var name_tag = document.getElementById("name_tag");
+                name_tag.innerHTML = speakerNamesArray;
+                
+                var dataContainer = document.getElementById("dataContainer");
+                var output = '<div class="table_main">';
+                for (var i = 0; i < data.length; i++) {
+                  output += '<div class="table_sub">';
+                  output += '<div class="table_sub_exp">';
+                  output += '<ul>';
+                  output += '<li><p class="circle" style="background-color: #'+palette[speakerNamesArray.indexOf(data[i].Speaker)]+';"></p></li>';                   
+                  output += '<li><p class="speaker" id="speaker'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Speaker + '</p></li>';
+                  output += '<li><p class="time">' + data[i].Start + '</p></li>';
+                  output += '<li><p class="time">' + data[i].End + '</p></li>';
+                  output += '</ul>';
+                  output += '</div><br>';
+                  output += '<div class="editable-cell" id="'+i+'" onmouseover="enableEdit(this)" onmouseout="disableEdit(this)">' + data[i].Text + '</div>';
+                  output += '</div>';
+                  output += '<br>';
+                }
                 output += '</div>';
-                output += '<br>';
-              }
-              output += '</div>';
-              dataContainer.innerHTML = output;
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+                dataContainer.innerHTML = output;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
       }
 
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           var userId = user.uid;
           console.log("User ID: ", userId);
+          // Get user photo and name
+          const userPhoto = user.photoURL;
+          const userName = user.displayName;
+
+          // Display user photo and name
+          document.getElementById("user-photo").src = userPhoto;
+          document.getElementById("user-photo-in-fixed").src = userPhoto;
+          document.getElementById("user-name-in-fixed").textContent = userName;
+          
+          function replaceWithIcon() {
+            document.getElementById("user-photo").style.display = "none"; // hide the image
+            
+            // create a new element with the circle shape
+            var circle = document.createElement("div");
+            circle.classList.add("circle_photo");
+
+            // create a new element with the icon
+            var icon = document.createElement("i");
+            icon.classList.add("user-icon"); // add the CSS class for the icon
+            icon.title = "User Icon"; // optional: add a title for the icon
+            icon.innerHTML = '<i class="fa-solid fa-user"></i>'; // add the Awesome font icon HTML code
+
+            // insert the icon element inside the circle element
+            circle.appendChild(icon);
+
+            // insert the circle element before the original image
+            var parent = document.getElementById("user-photo").parentNode;
+            parent.insertBefore(circle, document.getElementById("user-photo"));
+          }
+
+
           // Get a reference to the firestore database
           const db = firebase.firestore();
           // Get a reference to the file in the firestore database

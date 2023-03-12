@@ -72,10 +72,10 @@
   .head_container {
     height: 100%;
     display: flex;
-    
+    height: 60px;
   }
 
-  .head_left {
+  .head_name {
     width: 100%;
     height: 60px;
    
@@ -87,7 +87,7 @@
     padding: 7px 9%;
   }
 
-  .head_left h2{
+  .head_name h2{
     font-size: 28px;
     background: linear-gradient(135deg, #EF0594 0%, #FB6DFC 100%);
     background: -webkit-linear-gradient(-45deg, #EF0594 0%, #FB6DFC 100%);
@@ -96,10 +96,16 @@
     
   }
 
+  .head_left {
+    width: 50%;
+    height: 60px;
+    
+  }
+
   .head_right {
-    width: 100%;
+    width: 50%;
     height: 100%;
-    padding: 8px 6% 0 0;
+    padding: 8px 3% 0 0;
     text-align: right;
     top: 0;
     bottom: 0;
@@ -312,7 +318,7 @@
         position: sticky;
         top:0;
         /*横半分50%　縦を100vhにする*/
-        width: 21%;
+        width: 280px;
         height: 100vh;
         background-color: #f1f1f3;
         overflow-y: scroll;
@@ -329,7 +335,7 @@
         position: sticky;
         top:0;
         /*横半分50%　縦を100vhにする*/
-        width: 79%;
+        flex-grow: 1;
         height: 100vh;
         overflow-y: scroll;
         scrollbar-width: 20px;
@@ -344,8 +350,9 @@
     #user-profile {
         display: flex;
         align-items: center;
-        margin-top: 15px;
-        padding: 0px 9% 7px 9%;
+        margin-top: 40px;
+        padding: 7px 9%;
+        
       }
 
       #user-profile:hover {
@@ -359,7 +366,7 @@
         height: 50px;
         border-radius: 50%;
         margin-right: 10px;
-        
+        border: #2d3133 2px solid;
       }
 
       #user-profile-header {
@@ -375,6 +382,52 @@
         margin-left: 20px;
         box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);
       }
+
+    /* Define the font-family for Awesome font */
+    @font-face {
+        font-family: 'FontAwesome';
+        src: url('path/to/font/fontawesome-webfont.eot?v=4.7.0');
+        /* add other font formats for cross-browser compatibility */
+    }
+    
+    /* Define a CSS class for the circle shape */
+    .circle_photo {
+        display: inline-block;
+        width: 50px; /* adjust this to the desired size */
+        height: 50px; /* adjust this to the desired size */
+        border-radius: 50%;
+        background-color: #fff; /* or any other color */
+        overflow: hidden;
+        color: #2d3133;
+        margin-right: 8px;
+        padding: 5px 0 0 14.5px;
+        font-size: 25px;
+        
+    }
+
+    .circle_photo_header {
+        display: inline-block;
+        width: 45px; /* adjust this to the desired size */
+        height: 45px; /* adjust this to the desired size */
+        border-radius: 50%;
+        background-color: whiste; /* or any other color */
+        overflow: hidden;
+        color: #2d3133;
+        margin-left: 5px;
+        padding:5px 10px 0 0;
+        font-size: 21px;
+        border: #2d3133 2px solid;
+    }
+    
+    /* Define a CSS class for the icon */
+    .user-icon::before {
+        font-family: 'FontAwesome';
+        
+        color: #333; /* or any other color */
+        font-size: 30px; /* adjust this to the desired size */
+        line-height: 50px; /* adjust this to the desired size */
+        text-align: center;
+    }
 
     .selection_leftarea{
         margin-top: 35px;
