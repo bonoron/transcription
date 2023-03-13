@@ -1152,6 +1152,9 @@
         min-height: 50px;
         padding: 5px;
       }
+      .wrapper-content {
+        border: #EF0594 solid 1px;
+      }
       
       
 

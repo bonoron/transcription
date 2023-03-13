@@ -333,13 +333,78 @@
         editable.classList.add('editable');
         editable.contentEditable = true;
 
+        const addButton = document.createElement('button');
+        addButton.innerText = '+';
+        addButton.addEventListener('click', () => {
+          const index = editableContainers.indexOf(editableContainer);
+          
+          // Add a new Note section before the current editable container
+          const noteContainer = addNoteContainer(index);
+          textArea.insertBefore(noteContainer, editableContainer);
+          editableContainers.splice(index, 0, noteContainer);
+          
+          // Set focus on the new editable
+          newEditableContainer.querySelector('.editable').focus();
+        });
+
+        //ノート部分の機能実装
+        function addNoteContainer(index) {
+          const noteContainer = document.createElement('div');
+          noteContainer.classList.add('editable-container', 'note-container');
+          
+          const nonEditable = document.createElement('div');
+          nonEditable.classList.add('non-editable');
+          nonEditable.innerText = 'Note';
+          
+          const editable = document.createElement('div');
+          editable.classList.add('editable');
+          editable.contentEditable = true;
+
+          
+
+          const boldButton = document.createElement('button');
+          boldButton.innerText = 'Bold';
+          boldButton.addEventListener('click', () => {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const isBold = document.queryCommandState('bold');
+            if (isBold) {
+              document.execCommand('bold', false, null);
+            } else {
+              document.execCommand('bold', false, null);
+            }
+          });
+
+          const italicButton = document.createElement('button');
+          italicButton.innerText = 'Italicize';
+          italicButton.addEventListener('click', () => {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const isItalic = document.queryCommandState('italic');
+            if (isItalic) {
+              document.execCommand('italic', false, null);
+            } else {
+              document.execCommand('italic', false, null);
+            }
+          });
+
+          noteContainer.appendChild(nonEditable);
+          noteContainer.appendChild(editable);
+          nonEditable.appendChild(boldButton);
+          nonEditable.appendChild(italicButton);      
+          
+          return noteContainer;
+        }
+        
+        editableContainer.appendChild(addButton);
         editableContainer.appendChild(nonEditable);
         editableContainer.appendChild(editable);
+
         if (index === -1) {
           textArea.appendChild(editableContainer);
           editableContainers.push(editableContainer);
         }
-
+        
         editable.addEventListener('keydown', (event) => {
           if (event.keyCode === 13) {
             event.preventDefault();
@@ -350,23 +415,6 @@
             // Split the text into two parts based on the caret position
             const textBeforeCaret = text.substring(0, caretPos);
             const textAfterCaret = text.substring(caretPos);
-            if (textAfterCaret === ''){
-              const noteContainer = document.createElement('div');
-              noteContainer.classList.add('editable-container');
-
-              const noteNonEditable = document.createElement('div');
-              noteNonEditable.classList.add('non-editable');
-              noteNonEditable.innerHTML = '<h1 style=color:red;>This is a Note.</h1>';
-
-              const noteEditable = document.createElement('div');
-              noteEditable.classList.add('editable');
-              noteEditable.contentEditable = true;
-
-              noteContainer.appendChild(noteNonEditable);
-              noteContainer.appendChild(noteEditable);
-              textArea.insertBefore(noteContainer, editableContainer.nextSibling);
-              editableContainers.splice(index + 1, 0, noteContainer);
-            }
 
             // Set the text of the current editable to the text before the caret
             editable.innerText = textBeforeCaret;
@@ -384,7 +432,6 @@
 
             // Set focus on the new editable
             newEditableContainer.querySelector('.editable').focus();
-            console.log("in event;"+index);
             
           } else if (event.keyCode === 38) {
             event.preventDefault();
