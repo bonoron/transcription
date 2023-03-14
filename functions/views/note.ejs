@@ -357,11 +357,11 @@
           nonEditable.innerText = 'Note';
           
           const editable = document.createElement('div');
+          editable.setAttribute('id', 'noteEditable');
+          console.log(editable);
           editable.classList.add('editable');
           editable.contentEditable = true;
-
           
-
           const boldButton = document.createElement('button');
           boldButton.innerText = 'Bold';
           boldButton.addEventListener('click', () => {
@@ -388,11 +388,51 @@
             }
           });
 
+          const bulletButton = document.createElement('button');
+          bulletButton.innerText = 'Bullet';
+          bulletButton.addEventListener('click', addBulletPoint);
+
+          function addBulletPoint(editable) {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const lineStart = range.startContainer.parentNode;
+            
+            if (lineStart.closest('#noteEditable').contentEditable === "true"){
+              // If there's no selection, add bullet point to current line
+              if (!selection.toString()) {
+                const bulletPoint = document.createTextNode('● ');
+                lineStart.insertBefore(bulletPoint, lineStart.firstChild);
+              } else {
+                // If there's a selection, add bullet point to each line
+                const lines = selection.toString().split('\n');
+                range.setStart(range.startContainer, 0);
+                range.setEnd(range.endContainer, range.endContainer.length);
+                lines[0] = range.startContainer.data;
+                lines[lines.length-1] = range.endContainer.data;
+                
+                console.log(range);
+                console.log(lines);
+
+                range.deleteContents();
+                // Add bullet point to subsequent lines
+                for (let i = lines.length-1; 0 <= i; i--) {
+                  const line = document.createElement('p');
+                  line.appendChild(document.createTextNode('● ' + lines[i]));
+                  range.insertNode(line);
+                  console.log(line);
+                }
+              }
+            } else {
+              console.log("something wrong");
+            }
+          }
+
           noteContainer.appendChild(nonEditable);
           noteContainer.appendChild(editable);
           nonEditable.appendChild(boldButton);
-          nonEditable.appendChild(italicButton);      
-          
+          nonEditable.appendChild(italicButton);
+          nonEditable.appendChild(bulletButton);
+           
           return noteContainer;
         }
         
