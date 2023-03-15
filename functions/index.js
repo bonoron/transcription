@@ -22,6 +22,10 @@ app.get('/home', (req, res) => {
   res.render('home.ejs');
 });
 
+app.get('/test', (req, res) => {
+    res.render('test.ejs');
+  });
+
 
 //exports.app = functions.https.onRequest(app);
 //exports.app = functions.region('asia-northeast1').https.onRequest(app);

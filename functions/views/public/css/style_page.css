@@ -114,6 +114,25 @@
     margin: auto;
     padding: 4px 0;
   }
+  
+/*テスト用*/
+  #preview {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  outline: none;
+  min-height: 50px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
 
   /*左と右を囲う全体のエリア*/
     #wrapper{

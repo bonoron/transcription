@@ -168,6 +168,18 @@
               </div>
             </div>
           </div>
+
+          <!--テスト用のコード-->
+          <div class="editable-container">
+            <div class="container" style="width:70%; margin:0 auto;">
+                <h1>Type your message:</h1>
+                <div contenteditable="true" id="inputField" class="input-field" placeholder="Type here..."></div>
+                <h2>Preview:</h2>
+                <div id="preview"></div>
+            </div>
+        </div>
+         
+
           <div id="text-area">
             
           </div>
@@ -208,6 +220,39 @@
     <script src="./items/popup.js"></script>
     <script src="./items/file_name.js"></script>
     <script src="./items/scroll.js"></script>
+    <script>
+      // script.js
+      document.addEventListener("DOMContentLoaded", function () {
+    const inputField = document.getElementById("inputField");
+    const preview = document.getElementById("preview");
+
+    inputField.addEventListener("input", updatePreview);
+    inputField.addEventListener("keydown", handleKeyDown);
+
+    function updatePreview() {
+    console.log(inputField.innerHTML);
+    const lines = inputField.textContent.split('\n');
+    preview.innerHTML = '';
+
+    lines.forEach((line, index) => {
+        const p = document.createElement("p");
+        p.textContent = line;
+        preview.appendChild(p);
+        if (index < lines.length - 1) {
+            preview.appendChild(document.createElement("br"));
+            
+        }
+    });
+}
+
+function handleKeyDown(e) {
+    if (e.key === "Enter") {
+        updatePreview();
+    }
+}
+});
+
+    </script>
     <script>
       const audio = document.getElementById('myAudio');
       const playBtn = document.getElementById('playBtn');
@@ -359,8 +404,6 @@
           const editable = document.createElement('div');
           editable.setAttribute('id', 'noteEditable');
           editable.classList.add('editable');
-          const initialParagraph = document.createElement('p');
-          editable.appendChild(initialParagraph);
           editable.contentEditable = true;
           
           const boldButton = document.createElement('button');
@@ -442,35 +485,46 @@
           nonEditable.appendChild(italicButton);
           nonEditable.appendChild(bulletButton);
 
-          editable.addEventListener('keydown', function (event) {
+          editable.addEventListener('focus', function (event) {
+  if (editable.childNodes.length === 0) {
+    const p = document.createElement('p');
+    editable.appendChild(p);
+  }
+});
+
+editable.addEventListener('input', function (event) {
+  const noteEditable = document.getElementById('noteEditable');
+  console.log(noteEditable.innerHTML);
+  const selection = window.getSelection();
+  const range = selection.getRangeAt(0);
+  const currentNode = range.startContainer;
+
+  const closestP = currentNode.closest('p');
+  if (closestP) {
+    closestP.textContent = currentNode.textContent;
+  } else {
+    const newP = document.createElement('p');
+    newP.textContent = currentNode.textContent;
+    editable.appendChild(newP);
+  }
+});
+
+editable.addEventListener('keydown', function (event) {
   if (event.key === 'Enter') {
     event.preventDefault();
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
 
-    const newLine = document.createElement('p');
-    const lineStart = range.startContainer.parentNode;
-    console.log(lineStart);
-    lineStart.parentNode.insertBefore(newLine, lineStart.nextSibling);
-    range.setStart(newLine, 0);
+    const newP = document.createElement('p');
+    range.deleteContents();
+    range.insertNode(newP);
+    range.setStart(newP, 0);
     range.collapse(true);
     selection.removeAllRanges();
     selection.addRange(range);
   }
 });
 
-
-editable.addEventListener('input', function (event) {
-  const selection = window.getSelection();
-  const range = selection.getRangeAt(0);
-  const currentNode = range.startContainer;
-  console.log(editable);
-
-  const closestP = currentNode.closest('p');
-  if (closestP) {
-    closestP.textContent = currentNode.textContent;
-  }
-});
            
           return noteContainer;
         }

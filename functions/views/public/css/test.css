@@ -1,0 +1,39 @@
+body {
+    display: flex;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+  }
+
+  .memo-container {
+    width: 70%;
+    padding: 2rem;
+  }
+  
+  .memo-input .ql-editor {
+    font-size: 20px;
+    min-height: 150px;
+    line-height: 1.5;
+  }
+
+  .ql-toolbar {
+    height: 50px;
+    background-color: #f1f1f3;
+  }
+
+  .fas {
+    font-size: 20px;
+    color: #6c7686;
+  }
+
+  .ql-toolbar {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-width: 3px !important;
+  }
+  
+  .ql-container {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-width: 3px !important;
+  }
