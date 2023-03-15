@@ -358,8 +358,9 @@
           
           const editable = document.createElement('div');
           editable.setAttribute('id', 'noteEditable');
-          console.log(editable);
           editable.classList.add('editable');
+          const initialParagraph = document.createElement('p');
+          editable.appendChild(initialParagraph);
           editable.contentEditable = true;
           
           const boldButton = document.createElement('button');
@@ -396,34 +397,42 @@
             const selection = window.getSelection();
             const range = selection.getRangeAt(0);
             const lineStart = range.startContainer.parentNode;
-            
-            if (lineStart.closest('#noteEditable').contentEditable === "true"){
-              // If there's no selection, add bullet point to current line
-              if (!selection.toString()) {
-                const bulletPoint = document.createTextNode('● ');
-                lineStart.insertBefore(bulletPoint, lineStart.firstChild);
-              } else {
-                // If there's a selection, add bullet point to each line
-                const lines = selection.toString().split('\n');
-                range.setStart(range.startContainer, 0);
-                range.setEnd(range.endContainer, range.endContainer.length);
-                lines[0] = range.startContainer.data;
-                lines[lines.length-1] = range.endContainer.data;
-                
-                console.log(range);
-                console.log(lines);
-
-                range.deleteContents();
-                // Add bullet point to subsequent lines
-                for (let i = lines.length-1; 0 <= i; i--) {
-                  const line = document.createElement('p');
-                  line.appendChild(document.createTextNode('● ' + lines[i]));
-                  range.insertNode(line);
-                  console.log(line);
-                }
-              }
+            const bulletPointSymbol = '●';
+            console.log(editable.textContent);
+            if (range.startContainer.textContent === ''){
+              range.startContainer.textContent = `${bulletPointSymbol}`;
             } else {
-              console.log("something wrong");
+              if (lineStart.closest('#noteEditable').contentEditable === "true") {
+                if (!selection.toString()) {
+                  if (lineStart.firstChild.textContent.startsWith(`${bulletPointSymbol}`)) {
+                    lineStart.firstChild.textContent = lineStart.firstChild.textContent.slice(1);
+                  } else {
+                    const bulletPoint = document.createTextNode(`${bulletPointSymbol}`);
+                    lineStart.insertBefore(bulletPoint, lineStart.firstChild);
+                  }
+                } else {
+                  const lines = selection.toString().split('\n');
+                  range.setStart(range.startContainer, 0);
+                  range.setEnd(range.endContainer, range.endContainer.length);
+                  lines[0] = range.startContainer.data;
+                  lines[lines.length - 1] = range.endContainer.data;
+
+                  const filteredLines = lines.filter(line => line !== undefined);
+
+                  range.deleteContents();
+                  for (let i = filteredLines.length - 1; 0 <= i; i--) {
+                    const line = document.createElement('p');
+                    const currentLine = filteredLines[i];
+                    const newText = currentLine.startsWith(`${bulletPointSymbol}`) ? currentLine.slice(1) : `${bulletPointSymbol}${currentLine}`;
+                    if (newText !== `${bulletPointSymbol}`) {
+                      line.appendChild(document.createTextNode(newText));
+                      range.insertNode(line);
+                    }
+                  }
+                }
+              } else {
+                console.log("something wrong");
+              }
             }
           }
 
@@ -432,6 +441,36 @@
           nonEditable.appendChild(boldButton);
           nonEditable.appendChild(italicButton);
           nonEditable.appendChild(bulletButton);
+
+          editable.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+
+    const newLine = document.createElement('p');
+    const lineStart = range.startContainer.parentNode;
+    console.log(lineStart);
+    lineStart.parentNode.insertBefore(newLine, lineStart.nextSibling);
+    range.setStart(newLine, 0);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+});
+
+
+editable.addEventListener('input', function (event) {
+  const selection = window.getSelection();
+  const range = selection.getRangeAt(0);
+  const currentNode = range.startContainer;
+  console.log(editable);
+
+  const closestP = currentNode.closest('p');
+  if (closestP) {
+    closestP.textContent = currentNode.textContent;
+  }
+});
            
           return noteContainer;
         }
