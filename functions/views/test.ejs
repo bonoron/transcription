@@ -24,20 +24,40 @@
     icons['indent']['-1'] = '<i class="fas fa-outdent" aria-hidden="true"></i>';
 
     document.addEventListener('DOMContentLoaded', () => {
-        const memoInput = document.getElementById('memoInput');
-        const quill = new Quill(memoInput, {
-            theme: 'snow',
-            modules: {
-            toolbar: [
-                ['bold', 'italic'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                ['blockquote'],
-                [{ 'indent': '-1' }, { 'indent': '+1' }]
-            ]
-            },
-            placeholder: 'メモを書く'
-        });
+      const memoInput = document.getElementById('memoInput');
+      const quill = new Quill(memoInput, {
+        theme: 'snow',
+        modules: {
+          toolbar: {
+            container: [
+              ['bold'],
+              ['italic'],
+              ['divider'], // 目的の場所
+              [{ 'list': 'ordered' }],
+              [{ 'list': 'bullet' }],
+              ['blockquote'],
+              ['divider'], // 目的の場所
+              [{ 'indent': '-1' }],
+              [{ 'indent': '+1' }],
+            ],
+            handlers: {
+              'divider': function() {} // ハンドラを定義
+            }
+          },
+        },
+        placeholder: 'メモを書く'
+      });
+
+      // カスタムdivider要素を定義
+      const divider = document.createElement('span');
+      divider.className = 'toolbar-divider';
+      quill.getModule('toolbar').addHandler('divider', () => {});
+      quill.getModule('toolbar').container.querySelectorAll('.ql-divider').forEach((node, index) => {
+        node.parentNode.insertBefore(divider.cloneNode(), node.nextSibling);
+        node.remove();
+      });
     });
+
   </script>
 </body>
 </html>

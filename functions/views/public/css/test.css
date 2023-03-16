@@ -1,39 +1,60 @@
 body {
-    display: flex;
-    justify-content: center;
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-  }
+  display: flex;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+}
 
-  .memo-container {
-    width: 70%;
-    padding: 2rem;
-  }
-  
-  .memo-input .ql-editor {
-    font-size: 20px;
-    min-height: 150px;
-    line-height: 1.5;
-  }
+.memo-container {
+  width: 70%;
+  padding: 2rem;
+}
 
-  .ql-toolbar {
-    height: 50px;
-    background-color: #f1f1f3;
-  }
+.memo-input .ql-editor {
+  font-size: 20px;
+  min-height: 150px;
+  line-height: 1.5;
+}
 
-  .fas {
-    font-size: 20px;
-    color: #6c7686;
-  }
+.fas {
+  font-size: 19px;
+  color: #6c7686;
+}
 
-  .ql-toolbar {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-width: 3px !important;
-  }
-  
-  .ql-container {
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-width: 3px !important;
-  }
+.fas:hover {
+  color: aqua;
+}
+
+.ql-toolbar {
+  height: 60px;
+  background-color: #f1f1f3; 
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-width: 3px !important;
+}
+
+.ql-container {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-width: 3px !important;
+}
+
+/* 追加するセレクタ */
+.ql-toolbar button:hover,
+.ql-toolbar button:focus {
+  background-color: #ebeef0;
+  cursor: pointer;
+}
+
+.toolbar-divider {
+  display: inline-flex;
+  border-left: 1px solid #ccc;
+  margin-left: 0px;
+  height: 27px;
+}
+
+.ql-snow {
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
