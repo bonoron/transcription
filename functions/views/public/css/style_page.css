@@ -1176,6 +1176,213 @@
         border: #EF0594 solid 1px;
       }
       
+      .memo-container {
+        width: 100%;
+        margin: 0 auto;
+      }
+      
+      .memo-input .ql-editor {
+        font-size: 17px;
+        width: 100%;
+        line-height: 1.5;
+        overflow-y: hidden; /* スクロールバーを隠す */
+        resize: none; /* リサイズの無効化 */
+        white-space: pre-wrap; /* 改行を維持 */
+        max-height: 300px; /* 最大の高さを設定 */
+      }
+      
+      .ql-snow .fas {
+        font-size: 19px;
+        color: #6c7686;
+        position: absolute;
+        top: 25%;
+        left: 30%;
+      }
+      
+      .fa-list-ul, .fa-list-ol, .fa-quote-left {
+        top: 25% !important;
+        left: 25% !important;
+      }
+      
+      .ql-snow button {
+        position: relative !important;
+        padding: 20px !important;
+        border-radius: 5px !important;
+      }
+      
+      .ql-snow button:hover {
+        background-color: #ccc !important;
+      }
+      
+      .ql-toolbar {
+        height: 50px;
+        background-color: #f1f1f3; 
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        border-width: 3px !important;
+        padding-left: 15px !important;
+      }
+      
+      .ql-container {
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        border-width: 3px !important;
+      }
+      
+      .toolbar-divider {
+        display: inline-flex;
+        position: absolute;
+        border-left: 2px solid #ccc;
+        height: 30px;
+        margin-right: 25px;
+        top: 12px;
+      }
+      
+      .ql-snow {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        position: relative;
+      }
+      
+      .tooltip {
+        position: absolute;
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s;
+        white-space: nowrap;
+        z-index: 1000;
+        top: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .tooltip::after {
+        content: "";
+        position: absolute;
+        bottom: -8.5px;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+      }
+      
+      .fas:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+      
+      
+      .editable-container {
+        position: relative;
+      }
+      
+      .add_cell {
+        width: 100%;
+        height: 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+        line-height: 50px;
+        cursor: pointer;
+      }
+      
+      .editableAddButton {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
+        cursor: pointer;
+      }
+      
+      .add_cell:hover .editableAddButton {
+        display: block;
+      }
+      
+      .editableAddButton:before {
+        content: "メモを上段に追加する";
+        position: absolute;
+        top: -25px;
+        left: -100%;
+        width: 150px;
+        padding: 5px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
+      }
+      
+      .editableAddButton:hover:before {
+        opacity: 1;
+        visibility: visible;
+        top: -35px;
+      }
+      
+      .memo-header {
+        display: flex;
+        align-items: center;
+        /* 追加: 要素を左右に寄せる */
+        justify-content: space-between;
+      }
+
+      .delete-icon-memo {
+        padding: 5px;
+        border-radius: 5px;
+        background: none;
+        border: none;
+        font-size: 19px;
+        cursor: pointer;
+        position: relative; /* 変更: position を relative に変更 */
+        outline: none;
+        color: #6c7686;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .delete-icon-memo i {
+        margin-right: 5px;
+      }
+
+      .delete-icon-memo[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: -30px;
+        left: 57%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: #fff;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        white-space: nowrap;
+        z-index: 100;
+      }
+
+      .delete-icon-memo:hover {
+        color: #C15033;
+      }
+      
+      .delete-icon-memo[data-tooltip]:hover::before {
+        content: '';
+        position: absolute;
+        top: -0.25rem;
+        left: 57%;
+        transform: translateX(-50%);
+        border-width: 0.25rem;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+      }
+
+      
       
 
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

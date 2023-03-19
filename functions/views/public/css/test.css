@@ -1,28 +1,49 @@
 body {
-  display: flex;
   justify-content: center;
   font-family: Arial, sans-serif;
   font-size: 18px;
 }
 
+.editable-container .memo-container {
+  width: 100%;
+}
+
 .memo-container {
   width: 70%;
-  padding: 2rem;
+  margin: 0 auto;
 }
 
 .memo-input .ql-editor {
-  font-size: 20px;
-  min-height: 150px;
+  font-size: 17px;
+  width: 100%;
   line-height: 1.5;
+  overflow-y: hidden; /* スクロールバーを隠す */
+  resize: none; /* リサイズの無効化 */
+  white-space: pre-wrap; /* 改行を維持 */
+  max-height: 300px; /* 最大の高さを設定 */
 }
 
 .fas {
   font-size: 19px;
   color: #6c7686;
+  position: absolute;
+  top: 25%;
+  left: 30%;
 }
 
-.fas:hover {
-  color: aqua;
+.fa-list-ul, .fa-list-ol, .fa-quote-left {
+  top: 25% !important;
+  left: 25% !important;
+}
+
+.ql-snow button {
+  position: relative !important;
+  padding: 20px !important;
+  border-radius: 5px !important;
+}
+
+.ql-snow button:hover {
+  background-color: #ccc !important;
 }
 
 .ql-toolbar {
@@ -31,6 +52,7 @@ body {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   border-width: 3px !important;
+  padding-left: 15px !important;
 }
 
 .ql-container {
@@ -39,22 +61,104 @@ body {
   border-width: 3px !important;
 }
 
-/* 追加するセレクタ */
-.ql-toolbar button:hover,
-.ql-toolbar button:focus {
-  background-color: #ebeef0;
-  cursor: pointer;
+.editable-container .ql-container {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-width: 3px !important;
 }
 
 .toolbar-divider {
   display: inline-flex;
-  border-left: 1px solid #ccc;
-  margin-left: 0px;
-  height: 27px;
+  position: absolute;
+  border-left: 2px solid #ccc;
+  height: 30px;
+  margin-right: 25px;
+  top: 12px;
 }
 
 .ql-snow {
   display: flex;
   align-items: center;
   height: 60px;
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  z-index: 1000;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -8.5px;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.fas:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Add Memo Button */
+.add-memo-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+  z-index: 1000;
+}
+
+/* Add Memo Button hover effect */
+.add-memo-btn:hover {
+  background-color: #45a049;
+}
+
+#text-area {
+  position: relative;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.editable-container {
+  border: 1px solid gray;
+  margin: 10px;
+  padding: 10px;
+}
+.non-editable {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.editable {
+  border: 1px solid black;
+  min-height: 50px;
+  padding: 5px;
+  color: #6c7686;
 }

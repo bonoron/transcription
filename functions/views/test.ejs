@@ -10,9 +10,13 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 <body>
-    <div class="memo-container">
-        <div id="memoInput" class="memo-input"></div>
-    </div>
+  <div id="text-area">
+            
+  </div>
+  <div class="memo-container">
+    <div id="memoInput" class="memo-input"></div>
+  </div>
+  <button id="addMemoBtn" class="add-memo-btn"><i class="fas fa-plus"></i></button>
   <script>
     const icons = Quill.import('ui/icons');
     icons['bold'] = '<i class="fas fa-bold" aria-hidden="true"></i>';
@@ -30,15 +34,11 @@
         modules: {
           toolbar: {
             container: [
-              ['bold'],
-              ['italic'],
+              ['bold','italic'],
               ['divider'], // 目的の場所
-              [{ 'list': 'ordered' }],
-              [{ 'list': 'bullet' }],
-              ['blockquote'],
+              [{ 'list': 'ordered' },{ 'list': 'bullet' },'blockquote'],
               ['divider'], // 目的の場所
-              [{ 'indent': '-1' }],
-              [{ 'indent': '+1' }],
+              [{ 'indent': '-1' },{ 'indent': '+1' }],
             ],
             handlers: {
               'divider': function() {} // ハンドラを定義
@@ -56,8 +56,383 @@
         node.parentNode.insertBefore(divider.cloneNode(), node.nextSibling);
         node.remove();
       });
+
+      const iconDescriptions = {
+        'bold': '太字',
+        'italic': '斜体',
+        'list-ul': '箇条書き',
+        'list-ol': '番号付きリスト',
+        'quote-left': '引用',
+        'indent': 'インデント',
+        'outdent': 'インデント解除',
+      };
+
+      for (const iconClass in iconDescriptions) {
+        const icons = document.querySelectorAll(`.ql-toolbar .fa-${iconClass}`);
+        for (const icon of icons) {
+          const tooltip = document.createElement('span');
+          tooltip.className = 'tooltip';
+          tooltip.innerText = iconDescriptions[iconClass];
+
+          // ボタン要素を取得し、ツールチップを子要素として追加
+          const button = icon.closest('button');
+          button.appendChild(tooltip);
+
+          // ボタンにホバーイベントリスナーを追加
+          button.addEventListener('mouseenter', () => {
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = 1;
+          });
+
+          button.addEventListener('mouseleave', () => {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = 0;
+          });
+        }
+      }
+
+      memoInput.addEventListener('keydown', (event) => {
+        if (event.ctrlKey && event.shiftKey && event.keyCode === 65) {
+          event.preventDefault(); // エンターキーのデフォルトの動作を防止
+          const newMemoContainer = createNewMemoContainer();
+          document.body.insertBefore(newMemoContainer, document.getElementById('addMemoBtn'));
+          const newMemoInput = newMemoContainer.querySelector('.memo-input');
+          initQuillEditor(newMemoInput);
+          newMemoInput.focus();
+        }
+      });
     });
 
+    function initQuillEditor(container) {
+      const quill = new Quill(container, {
+        theme: 'snow',
+        modules: {
+          toolbar: {
+            container: [
+              ['bold', 'italic'],
+              ['divider'],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }, 'blockquote'],
+              ['divider'],
+              [{ 'indent': '-1' }, { 'indent': '+1' }],
+            ],
+            handlers: {
+              'divider': function () { }
+            }
+          },
+        },
+        placeholder: 'メモを書く'
+      });
+
+      const divider = document.createElement('span');
+      divider.className = 'toolbar-divider';
+      quill.getModule('toolbar').addHandler('divider', () => { });
+      quill.getModule('toolbar').container.querySelectorAll('.ql-divider').forEach((node, index) => {
+        node.parentNode.insertBefore(divider.cloneNode(), node.nextSibling);
+        node.remove();
+      });
+
+      const iconDescriptions = {
+        'bold': '太字',
+        'italic': '斜体',
+        'list-ul': '箇条書き',
+        'list-ol': '番号付きリスト',
+        'quote-left': '引用',
+        'indent': 'インデント',
+        'outdent': 'インデント解除',
+      };
+
+      for (const iconClass in iconDescriptions) {
+        const icons = document.querySelectorAll(`.ql-toolbar .fa-${iconClass}`);
+        for (const icon of icons) {
+          const tooltip = document.createElement('span');
+          tooltip.className = 'tooltip';
+          tooltip.innerText = iconDescriptions[iconClass];
+
+          const button = icon.closest('button');
+          button.appendChild(tooltip);
+
+          button.addEventListener('mouseenter', () => {
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = 1;
+          });
+
+          button.addEventListener('mouseleave', () => {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = 0;
+          });
+        }
+      }
+    }
+
+    function createNewMemoContainer() {
+      const memoContainer = document.createElement('div');
+      memoContainer.classList.add('memo-container');
+      const memoInput = document.createElement('div');
+      memoInput.classList.add('memo-input');
+      memoContainer.appendChild(memoInput);
+      memoInput.addEventListener('keydown', (event) => {
+        if (event.ctrlKey && event.shiftKey && event.keyCode === 65) {
+          event.preventDefault();
+          const newMemoContainer = createNewMemoContainer();
+          memoContainer.parentNode.insertBefore(newMemoContainer, memoContainer.nextSibling);
+          const newMemoInput = newMemoContainer.querySelector('.memo-input');
+          initQuillEditor(newMemoInput);
+          newMemoInput.focus();
+        }
+      });
+      return memoContainer;
+    }
+
+    document.getElementById('addMemoBtn').addEventListener('click', () => {
+      const newMemoContainer = createNewMemoContainer();
+      document.body.insertBefore(newMemoContainer, document.getElementById('addMemoBtn'));
+      const newMemoInput = newMemoContainer.querySelector('.memo-input');
+      initQuillEditor(newMemoInput);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const memoInput = document.getElementById('editable-main');
+      const quill = new Quill(memoInput, {
+        theme: 'snow',
+        modules: {
+          toolbar: false ,
+        },
+        placeholder: 'メモを書く'
+      });
+    });
+
+    function initQuillEditorMain(container) {
+      const quill = new Quill(container, {
+        theme: 'snow',
+        modules: {
+          toolbar: false,
+        },
+        placeholder: 'メモを書く'
+      });
+    }
+
+    const textArea = document.getElementById('text-area');
+    const editableContainers = [];
+
+    function addEditableContainer(index = -1) {
+      const editableContainer = document.createElement('div');
+      editableContainer.classList.add('editable-container');
+
+      const addCell = document.createElement('div');
+      addCell.classList.add('add_cell');
+
+      const nonEditable = document.createElement('div');
+      nonEditable.classList.add('non-editable');
+      nonEditable.innerText = 'This is a non-editable div woven into an editable text area.';
+
+      const memoContainer = document.createElement('div');
+      memoContainer.classList.add('memo-container');
+
+      const memoInput = document.createElement('div');
+      memoInput.classList.add('memo-input');
+      memoInput.setAttribute('id', 'editable-main');
+      memoContainer.appendChild(memoInput);
+      const newMemoInput = memoContainer.querySelector('.memo-input');
+      initQuillEditorMain(newMemoInput);
+
+      const addButton = document.createElement('button');
+      addButton.classList.add('editableAddButton');
+      addButton.innerText = '+ メモ';
+      addButton.addEventListener('click', () => {
+        const index = editableContainers.indexOf(editableContainer);
+        const newMemoContainer = createNewMemoContainer(index);
+        textArea.insertBefore(newMemoContainer, editableContainer);
+        const newMemoInput = newMemoContainer.querySelector('.memo-input');
+        initQuillEditor(newMemoInput);
+      });
+
+      editableContainer.appendChild(addCell);
+      addCell.appendChild(addButton);
+      editableContainer.appendChild(nonEditable);
+      editableContainer.appendChild(memoContainer);
+
+      if (index === -1) {
+        textArea.appendChild(editableContainer);
+        editableContainers.push(editableContainer);
+      }
+
+      function createNewMemoContainer(index) {
+        const memoContainer = document.createElement('div');
+        memoContainer.classList.add('memo-container');
+
+        const memoHeader = document.createElement('div');
+        memoHeader.classList.add('memo-header');
+
+        const memoText = document.createElement('h3');
+        memoText.classList.add('memoText');
+        memoText.innerText = 'メモ';
+
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('delete-icon-memo');
+        deleteButton.setAttribute('data-tooltip', '削除');
+
+        const deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('fas', 'fa-trash-alt');
+        deleteButton.appendChild(deleteIcon);
+        deleteButton.addEventListener('click', () => {
+          memoContainer.remove();
+        });
+
+        memoHeader.appendChild(memoText);
+        memoHeader.appendChild(deleteButton);
+        memoContainer.appendChild(memoHeader);
+
+        const memoInput = document.createElement('div');
+        memoInput.classList.add('memo-input');
+        memoContainer.appendChild(memoInput);
+
+        return memoContainer;
+      }
+
+      function focusOnAdjacentCell(editableContainer, direction) {
+        const index = editableContainers.indexOf(editableContainer);
+        const adjacentIndex = index + direction;
+        if (editableContainers.length > 1 && adjacentIndex >= 0 && adjacentIndex < editableContainers.length) {
+          const adjacentEditable = editableContainers[adjacentIndex].querySelector('.ql-editor');
+          editableContainers[index].remove();
+          editableContainers.splice(index, 1);
+          adjacentEditable.focus();
+        }
+      }
+
+      function getQuillCaretPosition(quillInstance) {
+        const selection = quillInstance.getSelection();
+        if (selection) {
+          return selection.index;
+        }
+        return 0;
+      }
+
+      memoInput.addEventListener('keydown', (event) => {
+        const index = editableContainers.indexOf(editableContainer);
+        const quillInstanceCurrent = Quill.find(memoInput);
+        const caretPos = getQuillCaretPosition(quillInstanceCurrent);
+
+        if (event.ctrlKey && event.keyCode === 38) {
+          // Ctrl + ↑で上のセルへ移動
+          event.preventDefault();
+          if (index > 0) {
+            editableContainers[index - 1].querySelector('.ql-editor').focus();
+          }
+        } else if (event.ctrlKey && event.keyCode === 40) {
+          // Ctrl + ↓で下のセルへ移動
+          event.preventDefault();
+          if (index < editableContainers.length - 1) {
+            editableContainers[index + 1].querySelector('.ql-editor').focus();
+          }
+        } else if (event.ctrlKey && event.keyCode === 13) {
+          event.preventDefault(); // エンターキーのデフォルトの動作を防止
+          const newEditableContainer = addEditableContainer(index + 1);
+          textArea.insertBefore(newEditableContainer, editableContainer.nextSibling);
+          editableContainers.splice(index + 1, 0, newEditableContainer);
+          const newMemoInput = newEditableContainer.querySelector('.memo-input');
+          initQuillEditorMain(newMemoInput);
+
+          // Quill エディタにフォーカスを与える
+          quillInstanceCurrent.focus();
+
+          // カーソル位置を取得
+          const caretPos = getQuillCaretPosition(quillInstanceCurrent);
+
+          // 現在のセルの全テキスト（デルタ）を取得
+          const allTextDelta = quillInstanceCurrent.getContents();
+
+          // カーソル位置でデルタを分割し、新しいデルタを作成
+          const textBeforeCaret = allTextDelta.slice(0, caretPos);
+          const textAfterCaret = allTextDelta.slice(caretPos);
+
+          // 現在のセルと新しいセルにテキストを設定
+          quillInstanceCurrent.setContents(textBeforeCaret);
+          const quillInstanceNew = Quill.find(newMemoInput);
+          quillInstanceNew.setContents(textAfterCaret);
+          newEditableContainer.querySelector('.ql-editor').focus();
+        } else if (event.key === 'Backspace') {
+          const quillInstanceCurrent = Quill.find(memoInput);
+          const caretPos = getQuillCaretPosition(quillInstanceCurrent);
+
+          if (caretPos === 0 && memoInput.innerText.trim() === '') {
+            event.preventDefault();
+            const index = editableContainers.indexOf(editableContainer);
+
+            if (index > 0) {
+              // 一つ上のセルを取得
+              const prevEditableContainer = editableContainers[index - 1];
+              const prevMemoInput = prevEditableContainer.querySelector('.memo-input');
+              const quillInstancePrev = Quill.find(prevMemoInput);
+
+              // 現在のセルを削除
+              editableContainers[index].remove();
+              editableContainers.splice(index, 1);
+
+              // 一つ上のセルにフォーカスを移動し、カーソルを文末に持ってくる
+              prevMemoInput.focus();
+              const prevTextLength = quillInstancePrev.getLength();
+              quillInstancePrev.setSelection(prevTextLength - 1, 0);
+            }
+          } else if (caretPos === 0 && memoInput.innerText.trim() !== '') {
+            event.preventDefault();
+            const index = editableContainers.indexOf(editableContainer);
+
+            if (index > 0) {
+              const prevEditableContainer = editableContainers[index - 1];
+              const prevMemoInput = prevEditableContainer.querySelector('.memo-input');
+              const quillInstancePrev = Quill.find(prevMemoInput);
+
+              // 現在のセルのテキストを一つ前のセルにくっつける
+              const currentCellContents = quillInstanceCurrent.getContents();
+              const prevCellLength = quillInstancePrev.getLength();
+              const currentCellText = quillInstanceCurrent.getText();
+              const textWithoutTrailingNewline = currentCellText.slice(0, -1);
+              quillInstancePrev.insertText(prevCellLength - 1, textWithoutTrailingNewline);
+
+              // 現在のセルを削除
+              focusOnAdjacentCell(memoInput.closest('.editable-container'), -1);
+              quillInstancePrev.setSelection(prevCellLength - 1, 0);
+            }
+          }
+        } else if (event.key === 'Delete') {
+          const quillInstanceCurrent = Quill.find(memoInput);
+          const caretPos = getQuillCaretPosition(quillInstanceCurrent);
+
+          if (caretPos === quillInstanceCurrent.getLength() - 1 && memoInput.innerText.trim() === '') {
+            event.preventDefault();
+            focusOnAdjacentCell(memoInput.closest('.editable-container'), 1);
+          } else if (caretPos === quillInstanceCurrent.getLength() - 1 && memoInput.innerText.trim() !== '') {
+            event.preventDefault();
+            const index = editableContainers.indexOf(editableContainer);
+
+            if (index < editableContainers.length - 1) {
+              const nextEditableContainer = editableContainers[index + 1];
+              const nextMemoInput = nextEditableContainer.querySelector('.memo-input');
+              const quillInstanceNext = Quill.find(nextMemoInput);
+
+              // 次のセルのテキストを現在のセルの最後にくっつける
+              const nextCellContents = quillInstanceNext.getContents();
+              const nextCellText = quillInstanceNext.getText();
+              const textWithoutTrailingNewline = nextCellText.slice(0, -1);
+              quillInstanceCurrent.insertText(caretPos, textWithoutTrailingNewline);
+
+              // 次のセルを削除
+              focusOnAdjacentCell(nextMemoInput.closest('.editable-container'), -1);
+
+              // カーソルを追加されたテキストの先頭に移動
+              quillInstanceCurrent.setSelection(caretPos, 0);
+            }
+          }
+        }
+      });
+
+      return editableContainer;
+    }
+
+
+    addEditableContainer();
   </script>
 </body>
 </html>

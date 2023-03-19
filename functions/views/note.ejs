@@ -12,6 +12,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   </head>
   <body>
     <div class="overlay">
@@ -168,18 +170,6 @@
               </div>
             </div>
           </div>
-
-          <!--テスト用のコード-->
-          <div class="editable-container">
-            <div class="container" style="width:70%; margin:0 auto;">
-                <h1>Type your message:</h1>
-                <div contenteditable="true" id="inputField" class="input-field" placeholder="Type here..."></div>
-                <h2>Preview:</h2>
-                <div id="preview"></div>
-            </div>
-        </div>
-         
-
           <div id="text-area">
             
           </div>
@@ -220,39 +210,7 @@
     <script src="./items/popup.js"></script>
     <script src="./items/file_name.js"></script>
     <script src="./items/scroll.js"></script>
-    <script>
-      // script.js
-      document.addEventListener("DOMContentLoaded", function () {
-    const inputField = document.getElementById("inputField");
-    const preview = document.getElementById("preview");
-
-    inputField.addEventListener("input", updatePreview);
-    inputField.addEventListener("keydown", handleKeyDown);
-
-    function updatePreview() {
-    console.log(inputField.innerHTML);
-    const lines = inputField.textContent.split('\n');
-    preview.innerHTML = '';
-
-    lines.forEach((line, index) => {
-        const p = document.createElement("p");
-        p.textContent = line;
-        preview.appendChild(p);
-        if (index < lines.length - 1) {
-            preview.appendChild(document.createElement("br"));
-            
-        }
-    });
-}
-
-function handleKeyDown(e) {
-    if (e.key === "Enter") {
-        updatePreview();
-    }
-}
-});
-
-    </script>
+    <script src="./items/config.js"></script>
     <script>
       const audio = document.getElementById('myAudio');
       const playBtn = document.getElementById('playBtn');
@@ -361,6 +319,7 @@ function handleKeyDown(e) {
         prevScrollpos = currentScrollpos;
       }
     </script>
+    <script src="./items/editableNote.js"></script>
     <script>
       //編集のためのコード（結果をどのように編集していくかを記している）
       const textArea = document.getElementById('text-area');
@@ -369,6 +328,9 @@ function handleKeyDown(e) {
       function addEditableContainer(index=-1) {
         const editableContainer = document.createElement('div');
         editableContainer.classList.add('editable-container');
+
+        const add_cell = document.createElement('div');
+        add_cell.classList.add('add_cell');
 
         const nonEditable = document.createElement('div');
         nonEditable.classList.add('non-editable');
@@ -379,157 +341,56 @@ function handleKeyDown(e) {
         editable.contentEditable = true;
 
         const addButton = document.createElement('button');
-        addButton.innerText = '+';
+        addButton.classList.add('editableAddButton');
+        addButton.innerText = '+ メモ';
         addButton.addEventListener('click', () => {
           const index = editableContainers.indexOf(editableContainer);
           
           // Add a new Note section before the current editable container
-          const noteContainer = addNoteContainer(index);
-          textArea.insertBefore(noteContainer, editableContainer);
-          editableContainers.splice(index, 0, noteContainer);
+          const newMemoContainer= createNewMemoContainer(index);
+          textArea.insertBefore(newMemoContainer, editableContainer);
           
-          // Set focus on the new editable
-          newEditableContainer.querySelector('.editable').focus();
+          const newMemoInput = newMemoContainer.querySelector('.memo-input');
+          initQuillEditor(newMemoInput);
         });
 
         //ノート部分の機能実装
-        function addNoteContainer(index) {
-          const noteContainer = document.createElement('div');
-          noteContainer.classList.add('editable-container', 'note-container');
-          
-          const nonEditable = document.createElement('div');
-          nonEditable.classList.add('non-editable');
-          nonEditable.innerText = 'Note';
-          
-          const editable = document.createElement('div');
-          editable.setAttribute('id', 'noteEditable');
-          editable.classList.add('editable');
-          editable.contentEditable = true;
-          
-          const boldButton = document.createElement('button');
-          boldButton.innerText = 'Bold';
-          boldButton.addEventListener('click', () => {
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            const isBold = document.queryCommandState('bold');
-            if (isBold) {
-              document.execCommand('bold', false, null);
-            } else {
-              document.execCommand('bold', false, null);
-            }
+        function createNewMemoContainer() {
+          const memoContainer = document.createElement('div');
+          memoContainer.classList.add('memo-container');
+
+          const memoHeader = document.createElement('div');
+          memoHeader.classList.add('memo-header');
+
+          const memoText = document.createElement('h3');
+          memoText.classList.add('memoText');
+          memoText.innerText = 'メモ';
+
+          const deleteButton = document.createElement('button');
+          deleteButton.classList.add('delete-icon-memo');
+          deleteButton.setAttribute('data-tooltip', '削除');
+
+          const deleteIcon = document.createElement('i');
+          deleteIcon.classList.add('fas', 'fa-trash-alt');
+          deleteButton.appendChild(deleteIcon);
+          deleteButton.addEventListener('click', () => {
+            memoContainer.remove();
           });
 
-          const italicButton = document.createElement('button');
-          italicButton.innerText = 'Italicize';
-          italicButton.addEventListener('click', () => {
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            const isItalic = document.queryCommandState('italic');
-            if (isItalic) {
-              document.execCommand('italic', false, null);
-            } else {
-              document.execCommand('italic', false, null);
-            }
-          });
+          memoHeader.appendChild(memoText);
+          memoHeader.appendChild(deleteButton);
+          memoContainer.appendChild(memoHeader);
 
-          const bulletButton = document.createElement('button');
-          bulletButton.innerText = 'Bullet';
-          bulletButton.addEventListener('click', addBulletPoint);
+          const memoInput = document.createElement('div');
+          memoInput.classList.add('memo-input');
+          memoContainer.appendChild(memoInput);
 
-          function addBulletPoint(editable) {
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            const lineStart = range.startContainer.parentNode;
-            const bulletPointSymbol = '●';
-            console.log(editable.textContent);
-            if (range.startContainer.textContent === ''){
-              range.startContainer.textContent = `${bulletPointSymbol}`;
-            } else {
-              if (lineStart.closest('#noteEditable').contentEditable === "true") {
-                if (!selection.toString()) {
-                  if (lineStart.firstChild.textContent.startsWith(`${bulletPointSymbol}`)) {
-                    lineStart.firstChild.textContent = lineStart.firstChild.textContent.slice(1);
-                  } else {
-                    const bulletPoint = document.createTextNode(`${bulletPointSymbol}`);
-                    lineStart.insertBefore(bulletPoint, lineStart.firstChild);
-                  }
-                } else {
-                  const lines = selection.toString().split('\n');
-                  range.setStart(range.startContainer, 0);
-                  range.setEnd(range.endContainer, range.endContainer.length);
-                  lines[0] = range.startContainer.data;
-                  lines[lines.length - 1] = range.endContainer.data;
-
-                  const filteredLines = lines.filter(line => line !== undefined);
-
-                  range.deleteContents();
-                  for (let i = filteredLines.length - 1; 0 <= i; i--) {
-                    const line = document.createElement('p');
-                    const currentLine = filteredLines[i];
-                    const newText = currentLine.startsWith(`${bulletPointSymbol}`) ? currentLine.slice(1) : `${bulletPointSymbol}${currentLine}`;
-                    if (newText !== `${bulletPointSymbol}`) {
-                      line.appendChild(document.createTextNode(newText));
-                      range.insertNode(line);
-                    }
-                  }
-                }
-              } else {
-                console.log("something wrong");
-              }
-            }
-          }
-
-          noteContainer.appendChild(nonEditable);
-          noteContainer.appendChild(editable);
-          nonEditable.appendChild(boldButton);
-          nonEditable.appendChild(italicButton);
-          nonEditable.appendChild(bulletButton);
-
-          editable.addEventListener('focus', function (event) {
-  if (editable.childNodes.length === 0) {
-    const p = document.createElement('p');
-    editable.appendChild(p);
-  }
-});
-
-editable.addEventListener('input', function (event) {
-  const noteEditable = document.getElementById('noteEditable');
-  console.log(noteEditable.innerHTML);
-  const selection = window.getSelection();
-  const range = selection.getRangeAt(0);
-  const currentNode = range.startContainer;
-
-  const closestP = currentNode.closest('p');
-  if (closestP) {
-    closestP.textContent = currentNode.textContent;
-  } else {
-    const newP = document.createElement('p');
-    newP.textContent = currentNode.textContent;
-    editable.appendChild(newP);
-  }
-});
-
-editable.addEventListener('keydown', function (event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-
-    const newP = document.createElement('p');
-    range.deleteContents();
-    range.insertNode(newP);
-    range.setStart(newP, 0);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }
-});
-
-           
-          return noteContainer;
+          return memoContainer;
         }
+
         
-        editableContainer.appendChild(addButton);
+        editableContainer.appendChild(add_cell);
+        add_cell.appendChild(addButton);
         editableContainer.appendChild(nonEditable);
         editableContainer.appendChild(editable);
 
@@ -539,7 +400,7 @@ editable.addEventListener('keydown', function (event) {
         }
         
         editable.addEventListener('keydown', (event) => {
-          if (event.keyCode === 13) {
+          if (event.shiftKey && event.keyCode === 13) {
             event.preventDefault();
             // Get the current text and the position of the caret
             const text = editable.innerText;
@@ -611,12 +472,11 @@ editable.addEventListener('keydown', function (event) {
             editable.blur();
             editableContainers[index + 1].querySelector('.editable').focus();
             window.scrollTo(0, editableContainers[index + 1].offsetTop);
-            
           }
         }
 
         function backContainer(editable) {
-          if (!editable) {
+          if (!editable || editableContainers.length === 1) {
             return;
           }
           const index = editableContainers.indexOf(editable.parentNode);
@@ -625,7 +485,7 @@ editable.addEventListener('keydown', function (event) {
           editableContainers[index-1].querySelector('.editable').focus();
         }
         function deleteContainer(editable) {
-          if (!editable) {
+          if (!editable || editableContainers.length === 1) {
             return;
           }
           const index = editableContainers.indexOf(editable.parentNode);
@@ -706,8 +566,7 @@ editable.addEventListener('keydown', function (event) {
         e.preventDefault();
         dropArea.classList.remove('drag-enter');
       });
-    </script>        
-    <script src="./items/config.js"></script>
+    </script>
     <script>
       var storage = firebase.storage();
       var storageRef = storage.ref();
